@@ -1,0 +1,54 @@
+---
+'$schema': http://json.schemastore.org/electron-builder
+
+appId: com.meituan.admin
+productName: MeituanAdmin
+artifactName: '${name}_${version}_${os}_${arch}.${ext}'
+
+files:
+  # the directory where vite will build the app to
+  - dist/**/*
+
+  # the directory where the application code lives
+  - electron/**/*
+
+directories:
+  buildResources: build # 'build' is the default value
+  output: dist-electron
+
+linux:
+  target:
+    - target: deb
+      arch:
+        - x64
+        - arm64
+        - armv7l
+
+win:
+  target:
+    - nsis
+  rfc3161TimeStampServer: http://timestamp.comodoca.com
+  icon: ./assets/logo.png
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  target:
+    target: default
+    arch:
+      - x64
+      - arm64
+  category: public.app-category.utilities
+  darkModeSupport: true
+
+  # Wether or not the apple app has to run with an hardened sandbox.
+  # This has to be enabled for the app to be notarized.
+  # https://developer.apple.com/documentation/security/hardened_runtime
+  hardenedRuntime: true
+  gatekeeperAssess: false
+
+  entitlements: 'build/mac/entitlements.plist'
+  entitlementsInherit: 'build/mac/entitlements.plist'
