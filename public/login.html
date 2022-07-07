@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ClientKeyManager</title>
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="stylesheet" href="css/mdui.min.css"/>
+    <script src="js/mdui.js"></script>
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+    <style>
+        body{
+            user-select: none;
+            overflow:hidden;
+        }
+        .mdui-appbar{
+            -webkit-app-region: drag
+        }
+        /*.mdui-theme-primary-indigo .mdui-color-theme {*/
+        /*    background-color: #2f344c!important;*/
+        /*    color: #fff!important;*/
+        /*}*/
+    </style>
+</head>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-theme-layout-dark">
+<div class="mdui-appbar">
+    <div class="mdui-toolbar mdui-color-theme">
+        <div style="margin-left: 5px;margin-right: 10px;height: 38px;padding: 10px;width: 38px;">
+            <img class="mdui-img-fluid" src="icon/128.png"/>
+        </div>
+        <a style="margin-left: 0 !important;" class="mdui-typo-title">TRACKER DESKTOP</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <button id="close-btn" class="mdui-fab mdui-fab-mini mdui-color-grey-800 mdui-ripple"
+                style="-webkit-app-region: no-drag;background-color: #262626 !important;">
+            <i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+</div>
+<div class="mdui-tab mdui-color-theme" mdui-tab>
+    <a id="rmt-tab-btn" href="#rmttab" class="mdui-ripple mdui-ripple-white">登录舆情中心</a>
+    <a id="usr-tab-btn" href="#usrtab" class="mdui-ripple mdui-ripple-white">申请子账户</a>
+</div>
+<div class="mdui-container doc-container">
+    <!--登录TAB-->
+    <div id="rmttab" class="mdui-p-a-1" style="height: 150px">
+        <div id="username-label" class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">account_circle</i>
+            <label class="mdui-textfield-label">账户名称</label>
+            <input id="username" class="mdui-textfield-input" type="text"/>
+        </div>
+        <div id="passwd-label" class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">lock</i>
+            <label class="mdui-textfield-label">密码凭证</label>
+            <input id="passwd" class="mdui-textfield-input" type="password"/>
+        </div>
+    </div>
+    <!--申请子账户TAB-->
+    <div id="usrtab" class="mdui-p-a-1" style="height: 150px">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">person_add</i>
+            <label class="mdui-textfield-label">申请的账号名称</label>
+            <input id="username_u" class="mdui-textfield-input" type="text"/>
+        </div>
+        <div class="mdui-textfield  mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">style</i>
+            <label class="mdui-textfield-label">预备账号密码</label>
+            <input id="passwd_u" class="mdui-textfield-input" type="text"/>
+        </div>
+    </div>
+    <!--分隔线-->
+    <br/>
+    <div class="mdui-divider"></div>
+    <br/>
+
+    <div class="actions mdui-clearfix">
+        <button id="more-btn" class="mdui-btn mdui-ripple more-option" type="button"
+                mdui-menu="{target: '#mc-login-menu', position: 'top', covered: true}">更多选项<i
+                class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i></button>
+        <ul class="mdui-menu" id="mc-login-menu">
+            <li id="forgot-btn" class="mdui-menu-item"><a class="mdui-ripple">忘记密码</a></li>
+            <li id="setting-btn" class="mdui-menu-item"><a class="mdui-ripple">高级设置</a></li>
+        </ul>
+        <button id="action-btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme action-btn"
+                style="float: right;">登录控制面板
+        </button>
+    </div>
+</div>
+</body>
+<script>
+    const conf = {
+        baseUrl: "http://127.0.0.1:9090/"
+    }
+
+    const {ipcRenderer} = require('electron');
+
+    let pageData = {
+        store_username: '',
+        store_passwd: '',
+        token: '',
+    };
+
+    let isLogin = true;
+
+    ipcRenderer.on("get-config", (event, args) => {
+        pageData = args
+    })
+
+    /* 初始化全局禁止右击和拖动a标签 */
+    $(document).ready(function () {
+        $(document).bind("contextmenu", function (e) {
+            return false;
+        });
+        $(function () {
+            setTimeout(function () {
+                if (pageData.store_username!==''){
+                    $("#username-label").addClass('mdui-textfield-not-empty')
+                    $("#username").val(pageData.store_username)
+                }
+                if (pageData.store_passwd!==''){
+                    $("#passwd-label").addClass('mdui-textfield-not-empty')
+                    $("#passwd").val(pageData.store_passwd)
+                }
+            }, 800)
+        })
+    });
+
+    $(function () {
+        $('a').mousedown(function (e) {
+            // 1 = 鼠标左键 left; 2 = 鼠标中键; 3 = 鼠标右键
+            return false;//阻止链接跳转
+        })
+    })
+
+    /* Clicked close button */
+    $('#close-btn').click(function () {
+        ipcRenderer.send('close-message');
+    })
+
+    /* Clicked login button */
+    $('#action-btn').click(function () {
+        let requestObject = {};
+        let errFunc = function (xhr) {
+            mdui.alert("请求失败：" + xhr.status + " " + xhr.statusText)
+        }
+        if (isLogin) {
+            requestObject.username = $("#username").val()
+            requestObject.password = $("#passwd").val()
+            if (requestObject.username ==="" || requestObject.password === ""){
+                mdui.alert("账号密码不能置空")
+                return;
+            }
+            ajax(requestObject, function (responseObject) {
+                if (responseObject.code === 200) {
+                    //登陆成功
+                    pageData.store_username = requestObject.username
+                    pageData.store_passwd = requestObject.password
+                    pageData.token = responseObject.data.token
+                    pageData.data = responseObject.data
+                    console.log(responseObject.data.token)
+                    console.log(responseObject.data)
+                    localStorage.setItem("token", pageData.token)
+                    localStorage.setItem("pageData", JSON.stringify(responseObject.data))
+                    ipcRenderer.send("save-config", pageData)
+                    mdui.snackbar("登陆成功")
+                    $(function () {
+                        setTimeout(function () {
+                            ipcRenderer.send("login-success-message", responseObject.data)
+                        }, 1000)
+                    })
+                } else {
+                    mdui.alert(responseObject.message)
+                }
+            }, errFunc)
+        } else {
+            requestObject.data.username_u = $("#username_u").val()
+            requestObject.data.passwd_u = $("#passwd_u").val()
+            if (requestObject.data.username_u ==="" || requestObject.data.passwd_u === ""){
+                mdui.alert("申请的账号密码不能为空")
+                return;
+            }
+            ajax(requestObject, function (result) {
+                const responseObject = $.parseJSON(result);
+                if (responseObject.status === 200) {
+                    //登陆成功
+                    mdui.alert("已发送申请，等待专人审核后联系您")
+                } else {
+                    mdui.alert(responseObject.errMsg)
+                }
+            }, errFunc)
+        }
+    })
+
+    $('#rmt-tab-btn').click(function () {
+        $('#more-btn').show()
+        $('#action-btn').text("登录控制面板")
+        isLogin = true
+    })
+
+    $('#usr-tab-btn').click(function () {
+        $('#more-btn').hide()
+        $('#action-btn').text("发送注册申请")
+        isLogin = false
+    })
+
+    $('#forgot-btn').click(function () {
+        mdui.alert("等待后续更新...")
+    })
+
+    $('#setting-btn').click(function () {
+        mdui.alert("等待后续更新...")
+    })
+
+
+    function ajax(jsonObject, success, error) {
+        console.log(jsonObject)
+        $.ajax({
+            method: 'POST',
+            url: conf.baseUrl + './api/user/login',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(jsonObject),
+            timeout: 500,
+            success: success,
+            error: error
+        });
+    }
+
+
+    /* Send a message */
+    function msg(str) {
+        ipcRenderer.send('asynchronous-message', str);
+    }
+</script>
+</html>
