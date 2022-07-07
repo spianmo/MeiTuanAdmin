@@ -1,8 +1,8 @@
 import {app, BrowserWindow, ipcMain, Menu} from 'electron'
 import {release} from 'os'
-import './ipc'
+import './ipc/index'
 import {appConf} from './configuration'
-import {setTray} from './tray'
+import {setTray} from './tray/index'
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()

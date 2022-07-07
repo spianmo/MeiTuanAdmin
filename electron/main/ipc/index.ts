@@ -1,6 +1,5 @@
 import {ipcMain} from "electron";
 import {closeLoginWindow, createMainWindow, closeMainWindow, createLoginWindow, minMainWindow, hideMainWindow} from "../index";
-import './esmodules'
 import './local'
 
 ipcMain.on('close-message', (event, arg) => {
