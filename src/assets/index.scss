@@ -1,0 +1,324 @@
+$directions: (
+        "t": "top",
+        "b": "bottom",
+        "l": "left",
+        "r": "right",
+);
+$dimensions: (
+        "p": "padding",
+        "m": "margin",
+);
+$borderColor: #dae2e6;
+$mainColor: #3e89f0;
+
+@each $dim in $dimensions {
+  @each $dir in $directions {
+    @for $i from -10 through 10 {
+      $size: $i * 5;
+
+      .#{nth($dim,1)}-#{nth($dir,1)}-#{$size} {
+        #{nth($dim,2)}-#{nth($dir,2)}: #{$size}px;
+      }
+
+      .#{nth($dim,1)}-#{$size} {
+        #{nth($dim,2)}: #{$size}px;
+      }
+    }
+  }
+}
+
+@for $i from 10 through 20 {
+  .font-size-#{$i} {
+    font-size: #{$i}px;
+  }
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  color: #4f6770;
+  background-color: #fff;
+  //font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+}
+
+.flex-prue {
+  display: flex;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-around {
+  justify-content: space-around;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.align-items {
+  align-items: center;
+}
+
+.text-lg {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.text-df {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.text-sm {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.text-red,
+.warning-row .cell {
+  color: #f16d6d;
+
+  .el-link.el-link--default {
+    color: #f16d6d;
+  }
+}
+
+.text-blue {
+  color: #5b8ff9;
+}
+
+.text-green {
+  color: #5cc6ba;
+}
+
+.text-gray {
+  color: #7d9199;
+}
+
+.text-black,
+.default-row .cell {
+  color: #394952;
+}
+
+.el-table--large .cell {
+  padding: 0;
+}
+
+.text-cut1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.header-row-class th {
+  color: #394952;
+  background-color: #fcfcfc !important;
+  border-top: 1px solid #ebeef5 !important;
+  border-bottom: 2px solid #ebeef5 !important;
+}
+
+.border {
+  border: 1px solid $borderColor;
+}
+
+.border-bottom {
+  border-bottom: 1px solid $borderColor;
+}
+
+.border-top {
+  border-top: 1px solid $borderColor;
+}
+
+.border-right {
+  border-right: 1px solid $borderColor;
+}
+
+.border-left {
+  border-left: 1px solid $borderColor;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.cursorDefault {
+  cursor: default;
+}
+
+.el-scrollbar__wrap {
+  //overflow: scroll;
+  //overflow-x: hidden;
+  //width: 100%;
+  //height: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #eee;
+  border-radius: 3px;
+}
+
+.float-left {
+  float: left;
+}
+
+.float-right {
+  float: right;
+}
+
+.no-select {
+  user-select: none;
+}
+
+.app-container {
+  width: 100%;
+  padding: 10px;
+}
+
+.width-full {
+  width: 100% !important;
+}
+
+.width50 {
+  width: 50% !important;
+}
+
+.width80 {
+  width: 80% !important;
+  margin: 0 auto;
+}
+
+.width90 {
+  width: 80% !important;
+  margin: 0 auto;
+}
+
+.inlineBlock {
+  display: block;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.desc-text {
+  color: rgba(155, 155, 155, 100);
+  font-size: 14px;
+  text-align: left;
+}
+
+.multiselect {
+  line-height: 16px;
+}
+
+.multiselect--active {
+  z-index: 1000 !important;
+}
+
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.clearfix {
+  &::after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.padding-content {
+  padding: 4px 0;
+}
+
+.text-ellipsis {
+  display: block;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+}
