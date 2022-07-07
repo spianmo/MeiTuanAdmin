@@ -39,7 +39,7 @@ async function createWindow() {
     minHeight: 480,
     minWidth: 800,
     resizable: false,
-    icon: join(ROOT_PATH.public, 'logo.png'),
+    icon: join(ROOT_PATH.public, 'favicon.ico'),
     webPreferences: {
       preload,
       nodeIntegration: true,
