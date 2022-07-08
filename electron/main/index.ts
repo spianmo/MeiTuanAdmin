@@ -160,7 +160,7 @@ ipcMain.handle('open-win', (event, arg) => {
     })
 
     if (app.isPackaged) {
-        childWindow.loadFile(appConf.icon, {hash: arg})
+        childWindow.loadFile(appConf.indexHtml, {hash: arg})
     } else {
         childWindow.loadURL(`${appConf.url}/#${arg}`)
         // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
