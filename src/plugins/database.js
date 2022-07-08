@@ -1,4 +1,5 @@
 import Dexie from 'dexie'
+import mongoify from 'dexie-mongoify'
 
 const dbName = 'electron-init'
 
