@@ -1,10 +1,9 @@
-
 /* Show a message box */
 import {dialog, ipcMain, shell} from "electron";
 import appStoreFs from "fs";
-import {debug, log} from "electron-log";
+import {debug} from "electron-log";
 
-function msg(str:string) {
+function msg(str: string) {
     const options =
         {
             type: 'info',

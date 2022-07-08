@@ -1,32 +1,32 @@
 <template>
   <div class='sidebar'>
-    <el-menu class='sidebar-el-menu'
+    <el-menu :collapse='collapse'
              :default-active='onRoutes'
-             :collapse='collapse'
              active-text-color='#20a0ff'
-             unique-opened router
+             class='sidebar-el-menu'
+             router unique-opened
     >
       <template v-for='item in menuList'>
         <template v-if='item.subs'>
-          <el-sub-menu :index='item.index' :key='item.index'>
+          <el-sub-menu :key='item.index' :index='item.index'>
             <template #title>
               <i :class='item.icon'></i>
               <span>{{ item.title }}</span>
             </template>
             <template v-for='subItem in item.subs'>
-              <el-sub-menu v-if='subItem.subs' :index='subItem.index' :key='subItem.index'>
+              <el-sub-menu v-if='subItem.subs' :key='subItem.index' :index='subItem.index'>
                 <template #title>{{ subItem.title }}</template>
                 <el-menu-item v-for='(threeItem, i) in subItem.subs' :key='i' :index='threeItem.index'>
                   {{ threeItem.title }}
                 </el-menu-item>
               </el-sub-menu>
-              <el-menu-item v-else :index='subItem.index' :key='subItem.index'>{{ subItem.title }}
+              <el-menu-item v-else :key='subItem.index' :index='subItem.index'>{{ subItem.title }}
               </el-menu-item>
             </template>
           </el-sub-menu>
         </template>
         <template v-else>
-          <el-menu-item :index='item.index' :key='item.index'>
+          <el-menu-item :key='item.index' :index='item.index'>
             <i :class='item.icon'></i>
             <template #title>{{ item.title }}</template>
           </el-menu-item>
@@ -39,8 +39,7 @@
 <script setup>
 import {computed, ref} from 'vue'
 import {useStore} from 'vuex'
-import {useRoute} from 'vue-router'
-import {useRouter} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()

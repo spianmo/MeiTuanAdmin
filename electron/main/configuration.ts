@@ -29,4 +29,4 @@ export class Configuration {
 
 const appConf = new Configuration()
 
-export { appConf }
+export {appConf}

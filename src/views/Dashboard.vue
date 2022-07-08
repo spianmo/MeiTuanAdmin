@@ -2,9 +2,9 @@
   <div>
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-card shadow="hover" class="mgb20" style="height:252px;">
+        <el-card class="mgb20" shadow="hover" style="height:252px;">
           <div class="user-info">
-            <img src="../assets/img/img.jpg" class="user-avator" alt/>
+            <img alt class="user-avator" src="../assets/img/img.jpg"/>
             <div class="user-info-cont">
               <div class="user-info-name">{{ name }}</div>
               <div>{{ role }}</div>
@@ -38,7 +38,7 @@
       <el-col :span="16">
         <el-row :gutter="20" class="mgb20">
           <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
               <div class="grid-content grid-con-1">
                 <i class="el-icon-user-solid grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -49,7 +49,7 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
               <div class="grid-content grid-con-2">
                 <i class="el-icon-message-solid grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -60,7 +60,7 @@
             </el-card>
           </el-col>
           <el-col :span="8">
-            <el-card shadow="hover" :body-style="{ padding: '0px' }">
+            <el-card :body-style="{ padding: '0px' }" shadow="hover">
               <div class="grid-content grid-con-3">
                 <i class="el-icon-s-goods grid-con-icon"></i>
                 <div class="grid-cont-right">
@@ -79,7 +79,7 @@
             </div>
           </template>
 
-          <el-table :show-header="false" :data="todoList" style="width:100%;">
+          <el-table :data="todoList" :show-header="false" style="width:100%;">
             <el-table-column width="40">
               <template #default="scope">
                 <el-checkbox v-model="scope.row.status"></el-checkbox>
@@ -87,9 +87,9 @@
             </el-table-column>
             <el-table-column>
               <template #default="scope">
-                <div class="todo-item" :class="{
+                <div :class="{
                                         'todo-item-del': scope.row.status,
-                                    }">{{ scope.row.title }}
+                                    }" class="todo-item">{{ scope.row.title }}
                 </div>
               </template>
             </el-table-column>

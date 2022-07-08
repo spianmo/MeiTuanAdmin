@@ -2,21 +2,21 @@
   <div>
     <div class='container'>
       <div class='handle-box'>
-        <el-select v-model='query.address' placeholder='地址' class='handle-select mr10'>
+        <el-select v-model='query.address' class='handle-select mr10' placeholder='地址'>
           <el-option key='1' label='广东省' value='广东省'></el-option>
           <el-option key='2' label='湖南省' value='湖南省'></el-option>
         </el-select>
-        <el-input v-model='query.name' placeholder='用户名' class='handle-input mr10'></el-input>
+        <el-input v-model='query.name' class='handle-input mr10' placeholder='用户名'></el-input>
         <el-button type='primary' @click='handleSearch'>搜索</el-button>
         <el-button type='' @click='handleClear'>清空</el-button>
       </div>
-      <el-table :data='tableData' border class='table' ref='multipleTable' header-cell-class-name='table-header'>
-        <el-table-column prop='name' label='用户名'></el-table-column>
+      <el-table ref='multipleTable' :data='tableData' border class='table' header-cell-class-name='table-header'>
+        <el-table-column label='用户名' prop='name'></el-table-column>
         <el-table-column label='账户余额'>
           <template #default='scope'>￥{{ scope.row.money }}</template>
         </el-table-column>
-        <el-table-column prop='address' label='地址'></el-table-column>
-        <el-table-column label='状态' align='center'>
+        <el-table-column label='地址' prop='address'></el-table-column>
+        <el-table-column align='center' label='状态'>
           <template #default='scope'>
             <el-tag :type="scope.row.state === '成功' ? 'success': scope.row.state === '失败'? 'danger': ''">
               {{ scope.row.state }}
@@ -24,23 +24,23 @@
           </template>
         </el-table-column>
 
-        <el-table-column prop='date' label='注册时间'></el-table-column>
-        <el-table-column label='操作' width='180' align='center'>
+        <el-table-column label='注册时间' prop='date'></el-table-column>
+        <el-table-column align='center' label='操作' width='180'>
           <template #default='scope'>
-            <el-link type='primary' text='编辑' @click='handleEdit(scope.$index, scope.row)'>编辑</el-link>
-            <el-link type='danger' text='删除' @click='handleDelete(scope.row.id)'>删除</el-link>
+            <el-link text='编辑' type='primary' @click='handleEdit(scope.$index, scope.row)'>编辑</el-link>
+            <el-link text='删除' type='danger' @click='handleDelete(scope.row.id)'>删除</el-link>
           </template>
         </el-table-column>
       </el-table>
       <div class='pagination'>
-        <el-pagination background layout='total, prev, pager, next' :current-page='query.page'
-                       :page-size='query.size' :total='pageTotal'
+        <el-pagination :current-page='query.page' :page-size='query.size' :total='pageTotal'
+                       background layout='total, prev, pager, next'
                        @current-change='handlePageChange'></el-pagination>
       </div>
     </div>
 
     <!-- 编辑弹出框 -->
-    <el-dialog title='编辑' v-model='editVisible' width='30%'>
+    <el-dialog v-model='editVisible' title='编辑' width='30%'>
       <el-form label-width='70px'>
         <el-form-item label='用户名'>
           <el-input v-model='form.name'></el-input>
@@ -60,9 +60,9 @@
 </template>
 
 <script setup>
-import {ref, reactive, onMounted} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
-import {initLog, updateLog, deleteLog, pageLogCount, pageLogData} from '../api'
+import {deleteLog, initLog, pageLogCount, pageLogData, updateLog} from '../api'
 
 const query = reactive({
   address: '',

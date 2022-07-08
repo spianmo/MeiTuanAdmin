@@ -1,4 +1,4 @@
-import {initLog, addLog, deleteLog, updateLog, pageLogCount, pageLogData} from './logApi'
+import {addLog, deleteLog, initLog, pageLogCount, pageLogData, updateLog} from './logApi'
 
 export {
     initLog,

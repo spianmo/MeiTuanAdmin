@@ -9,8 +9,8 @@
       <el-button type='primary' @click='GetByWhere'>GetByWhere</el-button>
       <el-divider/>
       <el-table :data='tableData' style='width: 100%'>
-        <el-table-column prop='key' label='key'/>
-        <el-table-column prop='value' label='value'/>
+        <el-table-column label='key' prop='key'/>
+        <el-table-column label='value' prop='value'/>
       </el-table>
     </div>
   </div>
