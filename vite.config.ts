@@ -16,7 +16,6 @@ export default defineConfig({
     esmodule([
       'execa',
       'node-fetch',
-      'file-type',
       'move-file',
     ]),
     electron({

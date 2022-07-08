@@ -3,7 +3,7 @@
     <v-header/>
     <v-sidebar/>
     <div :class="{ 'content-collapse': collapse }" class="content-box">
-      <!--            <v-tags></v-tags>-->
+<!--      <v-tags/>-->
       <div class="content">
         <router-view v-slot="{ Component }">
           <transition mode="out-in" name="move">
@@ -20,6 +20,9 @@
 <script setup>
 import {computed} from "vue";
 import {useStore} from "vuex";
+import VTags from "../components/base/vTags.vue";
+import VHeader from "../components/base/vHeader.vue";
+import VSidebar from "../components/base/vSidebar.vue";
 
 const store = useStore();
 const tagsList = computed(() =>

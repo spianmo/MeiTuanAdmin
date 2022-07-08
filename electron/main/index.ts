@@ -84,7 +84,7 @@ function _createMainWindow() {
 
 app.on('ready', async () => {
     setTray();
-    await _createLoginWindow();
+    await _createMainWindow();
 });
 
 app.on('window-all-closed', () => {

@@ -70,6 +70,7 @@ onMounted(() => {
 })
 
 const list = () => {
+  console.log(db)
   return db.collection('dict').orderBy('key').reverse().toArray()
 }
 

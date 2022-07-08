@@ -12,6 +12,7 @@ function initDb() {
     })
     db.open().then(r => {
         console.log('db opened')
+        console.log(db)
     }).catch(error => {
         console.log('open db error:', error)
     })
