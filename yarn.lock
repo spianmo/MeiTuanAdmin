@@ -363,41 +363,41 @@
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-2.3.3.tgz#fbf80cc039b82ac21a1acb0f0478de8f61fbf600"
   integrity sha512-SmQLDyhz+6lGJhPELsBdzXGc+AcaT8stgkbiTFGpXPe8Tl1tJaBw1A6pxDqDuRsVkD8uscrkx3hA7QDOoKYtyw==
 
-"@volar/code-gen@0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@volar/code-gen/-/code-gen-0.36.1.tgz#8f17846179e03e74f77425ee861aff7a0880c3ea"
-  integrity sha512-L2YQSe+UBchS7pBg/1J7LH2oHpWApD72pVhimoWdvDhn+5HKK0ZSTh3w1DUqo/VrWbNraTGTjKhaZ3g8WUJS6w==
+"@volar/code-gen@0.38.3":
+  version "0.38.3"
+  resolved "https://registry.npmmirror.com/@volar/code-gen/-/code-gen-0.38.3.tgz#185bcc18c403ec924f30ba73f898a3c2686e3c8c"
+  integrity sha512-0yCkDtaxffyfC9e2dSLGXJmG3b0rCfTa6vqxjr70ZFTtcf/VytmMBwboFicnm+Zoen9EI8wUNfw4upw9Slz5RQ==
   dependencies:
-    "@volar/source-map" "0.36.1"
+    "@volar/source-map" "0.38.3"
 
-"@volar/source-map@0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@volar/source-map/-/source-map-0.36.1.tgz#ecfb51931b73dad4bb11255e594cec0838caf47d"
-  integrity sha512-N5GcatbjReyGFAeYvmj/w3CxvsUd84T7MYyjQ8XYPaDEFHRA9DClMhPsM02tTBaV6kWYvgtf/fD6h+VUcU2wuA==
+"@volar/source-map@0.38.3":
+  version "0.38.3"
+  resolved "https://registry.npmmirror.com/@volar/source-map/-/source-map-0.38.3.tgz#c6e7e3303de4a85f6e3c2e716e5b72b763628f7d"
+  integrity sha512-8aVM+r4lsHnLjhvnjQ6kn4J++3I6VXtJblcGzWuIOn9M8pJmRGW6Si/eOVjayLWfvPCxXUM7e3sg4Nm2tufTmg==
 
-"@volar/vue-code-gen@0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@volar/vue-code-gen/-/vue-code-gen-0.36.1.tgz#ba75e77c1483f00bb13b1a70889f5bc4b9930e36"
-  integrity sha512-/lhXuobyiD5uBQ1LGeAvLa72p3oVWAjbBR/YYvGeyM+fRA4qPXhO8XLJSBIgKwXm2FhN02Ihl46XzAiHtrs7cQ==
+"@volar/vue-code-gen@0.38.3":
+  version "0.38.3"
+  resolved "https://registry.npmmirror.com/@volar/vue-code-gen/-/vue-code-gen-0.38.3.tgz#e0b1e67a47d209dd0452b7134e8265b0d899065b"
+  integrity sha512-euVuKtwV/KurRSVwNz5bZbCBJLwVOE56+Uh2PhsHcAM5Wzlt82cwLj07FbFagCftoC3IC/bsn43yuLc2I+ZjAQ==
   dependencies:
-    "@volar/code-gen" "0.36.1"
-    "@volar/source-map" "0.36.1"
-    "@vue/compiler-core" "^3.2.36"
-    "@vue/compiler-dom" "^3.2.36"
-    "@vue/shared" "^3.2.36"
+    "@volar/code-gen" "0.38.3"
+    "@volar/source-map" "0.38.3"
+    "@vue/compiler-core" "^3.2.37"
+    "@vue/compiler-dom" "^3.2.37"
+    "@vue/shared" "^3.2.37"
 
-"@volar/vue-typescript@0.36.1":
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/@volar/vue-typescript/-/vue-typescript-0.36.1.tgz#699a68a45764648487a622d7179da19dae77354f"
-  integrity sha512-7s5M1PN1pzj0pbEqNAY6zTbAES5FfbbC3nmUxTPjyx8Lbf1XHi8zqrLAHIOtKVAkvJO1pEn1T8plnvEFSvo5gw==
+"@volar/vue-typescript@0.38.3":
+  version "0.38.3"
+  resolved "https://registry.npmmirror.com/@volar/vue-typescript/-/vue-typescript-0.38.3.tgz#3ad546e87e4cd36e3cc6201ea38e77a2b4243874"
+  integrity sha512-rXh4RQBZrNfkiSnpBYbHrsxg7vBbZeYsGFgE/n8FVLcZfGlelsdXFIINsr/aZGUCJre9I15wQ44eEmXnc4+qww==
   dependencies:
-    "@volar/code-gen" "0.36.1"
-    "@volar/source-map" "0.36.1"
-    "@volar/vue-code-gen" "0.36.1"
-    "@vue/compiler-sfc" "^3.2.36"
-    "@vue/reactivity" "^3.2.36"
+    "@volar/code-gen" "0.38.3"
+    "@volar/source-map" "0.38.3"
+    "@volar/vue-code-gen" "0.38.3"
+    "@vue/compiler-sfc" "^3.2.37"
+    "@vue/reactivity" "^3.2.37"
 
-"@vue/compiler-core@3.2.37", "@vue/compiler-core@^3.2.36":
+"@vue/compiler-core@3.2.37", "@vue/compiler-core@^3.2.37":
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/@vue/compiler-core/-/compiler-core-3.2.37.tgz#b3c42e04c0e0f2c496ff1784e543fbefe91e215a"
   integrity sha512-81KhEjo7YAOh0vQJoSmAD68wLfYqJvoiD4ulyedzF+OEk/bk6/hx3fTNVfuzugIIaTrOx4PGx6pAiBRe5e9Zmg==
@@ -407,7 +407,7 @@
     estree-walker "^2.0.2"
     source-map "^0.6.1"
 
-"@vue/compiler-dom@3.2.37", "@vue/compiler-dom@^3.2.36":
+"@vue/compiler-dom@3.2.37", "@vue/compiler-dom@^3.2.37":
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/@vue/compiler-dom/-/compiler-dom-3.2.37.tgz#10d2427a789e7c707c872da9d678c82a0c6582b5"
   integrity sha512-yxJLH167fucHKxaqXpYk7x8z7mMEnXOw3G2q62FTkmsvNxu4FQSu5+3UMb+L7fjKa26DEzhrmCxAgFLLIzVfqQ==
@@ -415,7 +415,7 @@
     "@vue/compiler-core" "3.2.37"
     "@vue/shared" "3.2.37"
 
-"@vue/compiler-sfc@3.2.37", "@vue/compiler-sfc@^3.2.36":
+"@vue/compiler-sfc@3.2.37", "@vue/compiler-sfc@^3.2.37":
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/@vue/compiler-sfc/-/compiler-sfc-3.2.37.tgz#3103af3da2f40286edcd85ea495dcb35bc7f5ff4"
   integrity sha512-+7i/2+9LYlpqDv+KTtWhOZH+pa8/HnX/905MdVmAcI/mPQOBwkHHIzrsEsucyOIZQYMkXUiTkmZq5am/NyXKkg==
@@ -455,7 +455,7 @@
     estree-walker "^2.0.2"
     magic-string "^0.25.7"
 
-"@vue/reactivity@3.2.37", "@vue/reactivity@^3.2.36":
+"@vue/reactivity@3.2.37", "@vue/reactivity@^3.2.37":
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/@vue/reactivity/-/reactivity-3.2.37.tgz#5bc3847ac58828e2b78526e08219e0a1089f8848"
   integrity sha512-/7WRafBOshOc6m3F7plwzPeCu/RCVv9uMpOwa/5PiY1Zz+WLVRWiy0MYKwmg19KBdGtFWsmZ4cD+LOdVPcs52A==
@@ -487,7 +487,7 @@
     "@vue/compiler-ssr" "3.2.37"
     "@vue/shared" "3.2.37"
 
-"@vue/shared@3.2.37", "@vue/shared@^3.2.36":
+"@vue/shared@3.2.37", "@vue/shared@^3.2.37":
   version "3.2.37"
   resolved "https://registry.yarnpkg.com/@vue/shared/-/shared-3.2.37.tgz#8e6adc3f2759af52f0e85863dfb0b711ecc5c702"
   integrity sha512-4rSJemR2NQIo9Klm1vabqWjD8rs/ZaJSzMxkMNeJS6lHiUjjUeYFbooN19NgFjztubEKh3WlZUeOLVdbbUWHsw==
@@ -1658,9 +1658,9 @@ ejs@^3.1.7:
   dependencies:
     jake "^10.8.5"
 
-electron-builder@^23.0.3:
+electron-builder@^23.1.0:
   version "23.1.0"
-  resolved "https://registry.yarnpkg.com/electron-builder/-/electron-builder-23.1.0.tgz#fdd213387008e44ab7dcabe53b84dbd969c1a7cc"
+  resolved "https://registry.npmmirror.com/electron-builder/-/electron-builder-23.1.0.tgz#fdd213387008e44ab7dcabe53b84dbd969c1a7cc"
   integrity sha512-UEblaQY8N9m8/HriOwl7jgFJ4olpWDXwdDBqwUkQiRHVNRnCfrA0u8LV03li5ZYhma6zFWzfIZbHd+uk8y//lQ==
   dependencies:
     "@types/yargs" "^17.0.1"
@@ -1711,10 +1711,10 @@ electron-to-chromium@^1.4.172:
   resolved "https://registry.npmmirror.com/electron-to-chromium/-/electron-to-chromium-1.4.182.tgz#5d59214ebfe90b36f23e81cd226a42732cd8c677"
   integrity sha512-OpEjTADzGoXABjqobGhpy0D2YsTncAax7IkER68ycc4adaq0dqEG9//9aenKPy7BGA90bqQdLac0dPp6uMkcSg==
 
-electron@^19.0.3:
-  version "19.0.7"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-19.0.7.tgz#c7a7841646adc6457de70b93661cc400bfdf9d38"
-  integrity sha512-Wyg+oGkY8cWYmm8tVka6CZmhJxnyUx+Us2ALyWiY4w73+dO9XUNB/c7vQNIm1Uk/DLMn9vFzgvcS9YtOOMqpbg==
+electron@^19.0.8:
+  version "19.0.8"
+  resolved "https://registry.npmmirror.com/electron/-/electron-19.0.8.tgz#c4d4ba915de554f2926261eb37d3527d2b092d4c"
+  integrity sha512-OWK3P/NbDFfBUv+wbYv1/OV4jehY5DQPT7n1maQJfN9hsnrWTMktXS/bmS05eSUAjNAzHmKPKfiKH2c1Yr7nGw==
   dependencies:
     "@electron/get" "^1.14.1"
     "@types/node" "^16.11.26"
@@ -4396,17 +4396,17 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-electron-renderer@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.5.1.tgz#7be7fe6a1f3f3bb4dbff60f1f0e26e94033ab3b1"
-  integrity sha512-1OyzBrDLJe6FX+O3g5NSgyfAG2t4tLwPxITWNR0vwiE3fcykq4HBfZPEBgt1u+S3Fi5hmlCOjZdfrDlYmUjCgw==
+vite-plugin-electron-renderer@^0.5.3:
+  version "0.5.3"
+  resolved "https://registry.npmmirror.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.5.3.tgz#aaf1b3ba1a68ba8165f2e0f219844ce8d4fb1ce9"
+  integrity sha512-U3H/Wsgk7poNxsvGsjrP0m72o1ayMFG2kGcdHtfBOi9ilC0jawTBKDkmEb3dHD+Rp6klfQsefkqjpT+OZCZAaA==
 
-vite-plugin-electron@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/vite-plugin-electron/-/vite-plugin-electron-0.6.2.tgz#1e8ff20ec7ae89174ab9e75c1e7fe914322a0087"
-  integrity sha512-KkjIoeKj9n2kgQ+Xb1r206X55X1Etw3YcaUO4NEKKXnQPaCW6GtVMf+Np4INdiFYD1Hcvk8TRiE/9lIh7THYtg==
+vite-plugin-electron@^0.7.2:
+  version "0.7.2"
+  resolved "https://registry.npmmirror.com/vite-plugin-electron/-/vite-plugin-electron-0.7.2.tgz#39b9a2f83ac6f031d1b979c784c509f0a2ad1a4c"
+  integrity sha512-5uKDULpxXhJ1qiH2SG+2Wn6Grt2t36dpunCWSg3kDkNzu4fXyzd6vwLmbHkr0szKrFDVMJiuRktxTo64Sk2BMQ==
   dependencies:
-    vite-plugin-electron-renderer "^0.5.1"
+    vite-plugin-electron-renderer "^0.5.3"
 
 vite-plugin-esmodule@^1.3.2:
   version "1.3.2"
@@ -4453,16 +4453,16 @@ vue-router@^4.0.0-0:
   dependencies:
     "@vue/devtools-api" "^6.1.4"
 
-vue-tsc@^0.36.0:
-  version "0.36.1"
-  resolved "https://registry.yarnpkg.com/vue-tsc/-/vue-tsc-0.36.1.tgz#ea7feb9bd4739a38af374be80f727289668d4800"
-  integrity sha512-HeQPA72lYDcqdfs8NwbbeX8MsbswWxuXYSXgiFqlddlezmXFhD+6YdeoChTqsRe3F+WJ+FarnIfpb6Y5JLk+nA==
+vue-tsc@^0.38.3:
+  version "0.38.3"
+  resolved "https://registry.npmmirror.com/vue-tsc/-/vue-tsc-0.38.3.tgz#6a104f43ec1be27fe6888b3d400263357110636f"
+  integrity sha512-mWlneSF+PG2kXYGJI12N4XEAG4ljAkae7IcB93fspqSkEt/oKwDbWy3DzcPSgUm0LsXqOUprTMaZkwDVSRBIvw==
   dependencies:
-    "@volar/vue-typescript" "0.36.1"
+    "@volar/vue-typescript" "0.38.3"
 
-vue@^3.2.33, vue@^3.2.36:
+vue@^3.2.33, vue@^3.2.37:
   version "3.2.37"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-3.2.37.tgz#da220ccb618d78579d25b06c7c21498ca4e5452e"
+  resolved "https://registry.npmmirror.com/vue/-/vue-3.2.37.tgz#da220ccb618d78579d25b06c7c21498ca4e5452e"
   integrity sha512-bOKEZxrm8Eh+fveCqS1/NkG/n6aMidsI6hahas7pa0w/l7jkbssJVsRhVDs07IdDq7h9KHswZOgItnwJAgtVtQ==
   dependencies:
     "@vue/compiler-dom" "3.2.37"
