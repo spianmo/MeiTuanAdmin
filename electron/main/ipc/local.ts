@@ -1,7 +1,8 @@
 /* Show a message box */
-import {dialog, ipcMain, shell} from "electron";
+import {app, BrowserWindow, dialog, ipcMain, shell} from "electron";
 import appStoreFs from "fs";
-import {debug} from "electron-log";
+import {debug, log} from "electron-log";
+import {appConf} from "../configuration";
 
 function msg(str: string) {
     const options =
@@ -49,5 +50,24 @@ ipcMain.on('save-config', (event, arg) => {
         } else {
             debug("配置保存成功")
         }
+    })
+})
+
+// new window example arg: new windows url
+ipcMain.on('open-win', (event, arg) => {
+    const childWindow = new BrowserWindow({
+        webPreferences: {
+            preload: appConf.preload,
+        },
+    })
+
+    if (app.isPackaged) {
+        childWindow.loadFile(appConf.indexHtml, {hash: arg})
+    } else {
+        childWindow.loadURL(`${appConf.url}/#${arg}`)
+        // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    }
+    childWindow.on('ready-to-show', function () {
+        childWindow?.show()
     })
 })

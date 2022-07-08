@@ -1,8 +1,9 @@
-import {app, BrowserWindow, ipcMain, Menu} from 'electron'
+import {app, BrowserWindow, dialog, ipcMain, Menu} from 'electron'
 import {release} from 'os'
 import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
+import {log} from "electron-log";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -150,22 +151,3 @@ export const minMainWindow = () => {
 export const hideMainWindow = () => {
     mainWindow?.hide()
 }
-
-// new window example arg: new windows url
-ipcMain.handle('open-win', (event, arg) => {
-    const childWindow = new BrowserWindow({
-        webPreferences: {
-            preload: appConf.preload,
-        },
-    })
-
-    if (app.isPackaged) {
-        childWindow.loadFile(appConf.indexHtml, {hash: arg})
-    } else {
-        childWindow.loadURL(`${appConf.url}/#${arg}`)
-        // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-    }
-    childWindow.on('ready-to-show', function () {
-        childWindow?.show()
-    })
-})

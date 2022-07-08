@@ -20,6 +20,7 @@
 import {db} from '../plugins/database'
 import {onMounted, ref} from 'vue'
 import {ElMessage} from 'element-plus'
+import {ipcRenderer} from "electron";
 
 const tableData = ref([])
 
