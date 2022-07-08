@@ -13,14 +13,12 @@
   "engines": {
     "node": ">=14.17.0"
   },
-  "dependencies": {
+  "devDependencies": {
     "electron-log": "^4.4.7",
     "execa": "^6.1.0",
-    "file-type": "^17.1.1",
+    "file-type": "^17.1.2",
     "move-file": "^3.0.0",
-    "node-fetch": "^3.2.4"
-  },
-  "devDependencies": {
+    "node-fetch": "^3.2.4",
     "@vitejs/plugin-vue": "^2.3.3",
     "electron": "^19.0.3",
     "electron-builder": "^23.0.3",

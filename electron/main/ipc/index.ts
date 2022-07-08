@@ -8,6 +8,7 @@ import {
     minMainWindow
 } from "../index";
 import './local'
+import '../esmodules'
 
 ipcMain.on('close-message', (event, arg) => {
     closeLoginWindow()
