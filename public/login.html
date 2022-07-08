@@ -2,45 +2,54 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>ClientKeyManager</title>
+    <title>美团商家运营工具</title>
     <meta name="renderer" content="webkit"/>
     <meta name="force-rendering" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <link rel="stylesheet" href="css/mdui.min.css"/>
     <script src="js/mdui.js"></script>
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-    <script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+    <script>if (typeof module === 'object') {
+        window.jQuery = window.$ = module.exports;
+    }
+    ;</script>
     <style>
-        body{
+        body {
             user-select: none;
-            overflow:hidden;
+            overflow: hidden;
         }
-        .mdui-appbar{
+
+        .mdui-appbar {
             -webkit-app-region: drag
         }
+
+        .mdui-tab-indicator {
+            background-color: #ffe507 !important;
+        }
+
         /*.mdui-theme-primary-indigo .mdui-color-theme {*/
         /*    background-color: #2f344c!important;*/
         /*    color: #fff!important;*/
         /*}*/
     </style>
 </head>
-<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-theme-layout-dark">
+<body class="mdui-theme-primary-amber mdui-theme-accent-amber mdui-theme-layout-light">
 <div class="mdui-appbar">
     <div class="mdui-toolbar mdui-color-theme">
         <div style="margin-left: 5px;margin-right: 10px;height: 38px;padding: 10px;width: 38px;">
-            <img class="mdui-img-fluid" src="icon/128.png"/>
+            <img class="mdui-img-fluid" src="favicon.ico"/>
         </div>
-        <a style="margin-left: 0 !important;" class="mdui-typo-title">TRACKER DESKTOP</a>
+        <a style="margin-left: 0 !important;font-weight: 600" class="mdui-typo-title">商家运营工具</a>
         <div class="mdui-toolbar-spacer"></div>
-        <button id="close-btn" class="mdui-fab mdui-fab-mini mdui-color-grey-800 mdui-ripple"
-                style="-webkit-app-region: no-drag;background-color: #262626 !important;">
+        <button id="close-btn" class="mdui-fab mdui-fab-mini mdui-color-amber-a700 mdui-ripple"
+                style="-webkit-app-region: no-drag;-webkit-box-shadow: none">
             <i class="mdui-icon material-icons">close</i>
         </button>
     </div>
 </div>
 <div class="mdui-tab mdui-color-theme" mdui-tab>
-    <a id="rmt-tab-btn" href="#rmttab" class="mdui-ripple mdui-ripple-white">登录舆情中心</a>
-    <a id="usr-tab-btn" href="#usrtab" class="mdui-ripple mdui-ripple-white">申请子账户</a>
+    <a id="rmt-tab-btn" style="font-weight: 500" href="#rmttab" class="mdui-ripple mdui-ripple-white">登录运营后台</a>
+    <a id="usr-tab-btn" style="font-weight: 500" href="#usrtab" class="mdui-ripple mdui-ripple-white">商家列表</a>
 </div>
 <div class="mdui-container doc-container">
     <!--登录TAB-->
@@ -57,17 +66,65 @@
         </div>
     </div>
     <!--申请子账户TAB-->
-    <div id="usrtab" class="mdui-p-a-1" style="height: 150px">
-        <div class="mdui-textfield mdui-textfield-floating-label">
-            <i class="mdui-icon material-icons">person_add</i>
-            <label class="mdui-textfield-label">申请的账号名称</label>
-            <input id="username_u" class="mdui-textfield-input" type="text"/>
-        </div>
-        <div class="mdui-textfield  mdui-textfield-floating-label">
-            <i class="mdui-icon material-icons">style</i>
-            <label class="mdui-textfield-label">预备账号密码</label>
-            <input id="passwd_u" class="mdui-textfield-input" type="text"/>
-        </div>
+    <div id="usrtab" class="mdui-p-a-1" style="height: 150px;overflow: auto">
+        <div class="mdui-list mdui-list-dense">
+
+
+                <label class="mdui-list-item mdui-ripple">
+                    <div class="mdui-list-item-avatar">
+                        <img :src="gen_text_img(64, '夜')"/>
+                    </div>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">老潼关肉夹馍</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">
+                            <span class="mdui-text-color-theme-text">
+                                shiaadhkhak,3213123131
+                            </span>
+                        </div>
+                    </div>
+                    <label class="mdui-radio">
+                        <input type="radio" name="group1" checked/>
+                        <i class="mdui-radio-icon"></i>
+                    </label>
+                </label>
+            <li class="mdui-divider"></li>
+                <label class="mdui-list-item mdui-ripple">
+                    <div class="mdui-list-item-avatar">
+                        <img :src="gen_text_img(64, '夜')"/>
+                    </div>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">沙县小吃</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">
+                            <span class="mdui-text-color-theme-text">
+                                shiaadhkhak,3213123131
+                            </span>
+                        </div>
+                    </div>
+                    <label class="mdui-radio">
+                        <input type="radio" name="group1"/>
+                        <i class="mdui-radio-icon"></i>
+                    </label>
+                </label>
+            <li class="mdui-divider"></li>
+                <label class="mdui-list-item mdui-ripple">
+                    <div class="mdui-list-item-avatar">
+                        <img :src="gen_text_img(64, '夜')"/>
+                    </div>
+                    <div class="mdui-list-item-content">
+                        <div class="mdui-list-item-title">夜叉烧烤场</div>
+                        <div class="mdui-list-item-text mdui-list-item-one-line">
+                            <span class="mdui-text-color-theme-text">
+                                shiaadhkhak,3213123131
+                            </span>
+                        </div>
+                    </div>
+                    <label class="mdui-radio">
+                        <input type="radio" name="group1"/>
+                        <i class="mdui-radio-icon"></i>
+                    </label>
+                </label>
+
+            </div>
     </div>
     <!--分隔线-->
     <br/>
@@ -79,11 +136,10 @@
                 mdui-menu="{target: '#mc-login-menu', position: 'top', covered: true}">更多选项<i
                 class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i></button>
         <ul class="mdui-menu" id="mc-login-menu">
-            <li id="forgot-btn" class="mdui-menu-item"><a class="mdui-ripple">忘记密码</a></li>
-            <li id="setting-btn" class="mdui-menu-item"><a class="mdui-ripple">高级设置</a></li>
+            <li id="forgot-btn" class="mdui-menu-item"><a class="mdui-ripple">忘记密码？</a></li>
         </ul>
         <button id="action-btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme action-btn"
-                style="float: right;">登录控制面板
+                style="float: right;">登录商家后台
         </button>
     </div>
 </div>
@@ -114,11 +170,11 @@
         });
         $(function () {
             setTimeout(function () {
-                if (pageData.store_username!==''){
+                if (pageData.store_username !== '') {
                     $("#username-label").addClass('mdui-textfield-not-empty')
                     $("#username").val(pageData.store_username)
                 }
-                if (pageData.store_passwd!==''){
+                if (pageData.store_passwd !== '') {
                     $("#passwd-label").addClass('mdui-textfield-not-empty')
                     $("#passwd").val(pageData.store_passwd)
                 }
@@ -147,7 +203,7 @@
         if (isLogin) {
             requestObject.username = $("#username").val()
             requestObject.password = $("#passwd").val()
-            if (requestObject.username ==="" || requestObject.password === ""){
+            if (requestObject.username === "" || requestObject.password === "") {
                 mdui.alert("账号密码不能置空")
                 return;
             }
@@ -174,42 +230,24 @@
                 }
             }, errFunc)
         } else {
-            requestObject.data.username_u = $("#username_u").val()
-            requestObject.data.passwd_u = $("#passwd_u").val()
-            if (requestObject.data.username_u ==="" || requestObject.data.passwd_u === ""){
-                mdui.alert("申请的账号密码不能为空")
-                return;
-            }
-            ajax(requestObject, function (result) {
-                const responseObject = $.parseJSON(result);
-                if (responseObject.status === 200) {
-                    //登陆成功
-                    mdui.alert("已发送申请，等待专人审核后联系您")
-                } else {
-                    mdui.alert(responseObject.errMsg)
-                }
-            }, errFunc)
+
         }
     })
 
     $('#rmt-tab-btn').click(function () {
         $('#more-btn').show()
-        $('#action-btn').text("登录控制面板")
+        $('#action-btn').text("登录商家后台")
         isLogin = true
     })
 
     $('#usr-tab-btn').click(function () {
         $('#more-btn').hide()
-        $('#action-btn').text("发送注册申请")
+        $('#action-btn').text("登录选中商家")
         isLogin = false
     })
 
     $('#forgot-btn').click(function () {
-        mdui.alert("等待后续更新...")
-    })
-
-    $('#setting-btn').click(function () {
-        mdui.alert("等待后续更新...")
+        mdui.alert("请联系工作室负责人")
     })
 
 
@@ -230,6 +268,25 @@
     /* Send a message */
     function msg(str) {
         ipcRenderer.send('asynchronous-message', str);
+    }
+
+    function gen_text_img(size, s) {
+        let colors = [
+            "rgb(239,150,26)", 'rgb(255,58,201)', "rgb(111,75,255)", "rgb(36,174,34)", "rgb(80,80,80)"
+        ];
+        let cvs = document.createElement("canvas");
+        cvs.setAttribute('width', size[0]);
+        cvs.setAttribute('height', size[1]);
+        let ctx = cvs.getContext("2d");
+        ctx.fillStyle = colors[Math.floor(Math.random()*(colors.length))];
+        ctx.fillRect(0, 0, size[0], size[1]);
+        ctx.fillStyle = 'rgb(255,255,255)';
+        ctx.font = size[0]*0.6+"px Arial";
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+        ctx.fillText(s,size[0]/2,size[1]/2);
+
+        return cvs.toDataURL('image/jpeg', 1);
     }
 </script>
 </html>
