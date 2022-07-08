@@ -165,4 +165,7 @@ ipcMain.handle('open-win', (event, arg) => {
         childWindow.loadURL(`${appConf.url}/#${arg}`)
         // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     }
+    childWindow.on('ready-to-show', function () {
+        childWindow?.show()
+    })
 })
