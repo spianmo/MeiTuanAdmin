@@ -3,7 +3,7 @@ name: Release
 on:
   push:
   release:
-    branches: [vite]
+    branches: [main]
     types:
       - published
     paths-ignore:
@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         node: ["16"]
-        os: [ windows-latest ]
+        os: [ windows-2019 ]
 
     steps:
       - uses: actions/checkout@v2
