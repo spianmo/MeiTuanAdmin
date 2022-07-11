@@ -58,6 +58,7 @@ ipcMain.on('open-win', (event, arg) => {
     const childWindow = new BrowserWindow({
         webPreferences: {
             preload: appConf.preload,
+            nodeIntegration: true,
         },
     })
 

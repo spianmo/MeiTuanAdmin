@@ -7,6 +7,7 @@ import {initDb} from './plugins/database'
 import './assets/css/icon.css'
 import './assets/css/base.css'
 import './esmodules'
+import './samples/node-api'
 
 const app = createApp(App)
 // 初始化插件

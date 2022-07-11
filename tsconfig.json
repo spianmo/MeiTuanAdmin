@@ -15,9 +15,6 @@
     "skipLibCheck": true,
     "allowJs": true
   },
-  "path": {
-    "@": ["src/*"]
-  },
   "exclude": [
     "dist",
     "public"

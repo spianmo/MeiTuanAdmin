@@ -4607,17 +4607,17 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-electron-renderer@^0.5.4:
-  version "0.5.4"
-  resolved "https://registry.npmmirror.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.5.4.tgz"
-  integrity sha512-on0xBIK42osqdf8k20IZByMcrkUq1q+ANA+53Y1c1p0DCtKdAdl2QdtkXAO8iYfySUi/c8ZtIS0XVbAQlZ0qDQ==
+vite-plugin-electron-renderer@^0.5.7:
+  version "0.5.7"
+  resolved "https://registry.npmmirror.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.5.7.tgz#3907ab7c8b3b19b57f11ff6b2685dfd2bf70234d"
+  integrity sha512-Rd5SYh48U1Ov/VVxpXQ3br4oeyOUEYtrvwH3DT0P+MOvhLa140to3zZsMZy3flOUg/9SW1wf3eFVzQwexY+QAA==
 
-vite-plugin-electron@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.npmmirror.com/vite-plugin-electron/-/vite-plugin-electron-0.7.3.tgz"
-  integrity sha512-N3E+Ump7KJaeTsLTK+BXRXw7x71Fa8d0fd8aKgrp4XD/srFEDy185vMvvEbPuKt2TgpFMeGZjd/7v0NfX3CY/w==
+vite-plugin-electron@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.npmmirror.com/vite-plugin-electron/-/vite-plugin-electron-0.7.5.tgz#a24e6d58446b2847a78ee3c522aabbaa88232a4d"
+  integrity sha512-A1MFutQDy59d2e916jKL+IUxs3gE3LgOuCdUPjwSvI6TT2gdRvFhS6pwBb5tRC0YW0tRGnPTW87b0hnDgYr3kw==
   dependencies:
-    vite-plugin-electron-renderer "^0.5.4"
+    vite-plugin-electron-renderer "^0.5.7"
 
 vite-plugin-esmodule@^1.3.2:
   version "1.3.2"

@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
 import pkg from './package.json'
 import esmodule from 'vite-plugin-esmodule'
-import { builtinModules } from 'module'
 
 rmSync('dist', { recursive: true, force: true }) // v14.14.0
 
@@ -24,15 +23,7 @@ export default defineConfig({
         entry: 'electron/main/index.ts',
         vite: {
           build: {
-            outDir: 'dist/electron/main',
-            rollupOptions: {
-              external: [
-                'electron',
-                ...builtinModules,
-                ...builtinModules.map(e => `node:${e}`),
-                ...Object.keys(pkg.dependencies || {}),
-              ],
-            },
+            outDir: 'dist/electron/main'
           },
         },
       },
