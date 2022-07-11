@@ -19,7 +19,8 @@
     "@": ["src/*"]
   },
   "exclude": [
-    "dist"
+    "dist",
+    "public"
   ],
   "references": [
     { "path": "./tsconfig.node.json" }

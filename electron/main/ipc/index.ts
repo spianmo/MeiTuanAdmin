@@ -8,7 +8,9 @@ import {
     minMainWindow
 } from "../index";
 import './local'
-import '../esmodules'
+import './serialport'
+import './sqlite3'
+
 import axios from "axios";
 
 ipcMain.on('close-message', (event, arg) => {

@@ -16,6 +16,7 @@ export default defineConfig({
     esmodule([
       'execa',
       'node-fetch',
+      'file-type',
       'move-file',
     ]),
     electron({
@@ -34,7 +35,6 @@ export default defineConfig({
             },
           },
         },
-
       },
       preload: {
         input: {

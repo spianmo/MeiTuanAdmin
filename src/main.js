@@ -6,6 +6,7 @@ import installElementPlus from './plugins/element'
 import {initDb} from './plugins/database'
 import './assets/css/icon.css'
 import './assets/css/base.css'
+import './esmodules'
 
 const app = createApp(App)
 // 初始化插件
