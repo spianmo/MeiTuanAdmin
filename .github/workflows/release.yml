@@ -34,7 +34,7 @@ jobs:
     strategy:
       matrix:
         node: ["16"]
-        os: [ windows-latest, ubuntu-latest, macos-latest  ]
+        os: [ ubuntu-latest ]
 
     steps:
       - uses: actions/checkout@v2
