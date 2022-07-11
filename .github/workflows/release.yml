@@ -3,7 +3,7 @@ name: Release
 on:
   push:
   release:
-    branches: [main]
+    branches: [vite]
     types:
       - published
     paths-ignore:
