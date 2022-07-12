@@ -32,6 +32,7 @@
         webview.send('sendAccount', accountObject)
     });
     webview.addEventListener('ipc-message', (res) => {
+        //接收到COOKIE后关闭 美团登录页 并展示主窗口，否则一直展示
         console.log("cookie: ", res.args[0])
         ipcRenderer.send('closeMeiTuanLogin');
         ipcRenderer.send('showMainWindow');

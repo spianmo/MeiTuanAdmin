@@ -1,5 +1,5 @@
 /* Show a message box */
-import {app, BrowserWindow, dialog, ipcMain, shell} from "electron";
+import {app, BrowserWindow, dialog, ipcMain, shell, session} from "electron";
 import appStoreFs from "fs";
 import {debug, log} from "electron-log";
 import {appConf} from "../configuration";
@@ -85,7 +85,7 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
         },
     })
     mtLoginWindow.loadFile(appConf.meituanHtml)
-    //mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    // mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     mtLoginWindow.on('ready-to-show', function () {
         mtLoginWindow.webContents.send('receiveCookie', arg);
         mtLoginWindow?.show()
@@ -111,3 +111,25 @@ ipcMain.on('showMainWindow', (event, arg) => {
 ipcMain.on('closeMainWindow', (event, arg) => {
     closeMainWindow()
 })
+
+ipcMain.on('clearAllCookie', (event, arg) => {
+    // 查询所有 cookies。删除。
+    session.defaultSession.cookies.get({})
+        .then((cookies) => {
+            cookies.forEach(cookie => {
+                let url = '';
+                // get prefix, like https://www.
+                url += cookie.secure ? 'https://' : 'http://';
+                url += cookie.domain.charAt(0) === '.' ? 'www' : '';
+                // append domain and path
+                url += cookie.domain;
+                url += cookie.path;
+                session.defaultSession.cookies.remove(url, cookie.name);
+            })
+            console.log("已清除Cookie")
+        }).catch((error) => {
+        console.log(error)
+    })
+})
+
+

@@ -212,6 +212,7 @@
             }
             ipcRenderer.send('save-config', requestObject)
             ipcRenderer.send('closeLogin')
+            ipcRenderer.send('clearAllCookie')
             ipcRenderer.send('openMeiTuanLogin', requestObject)
         } else {
 
