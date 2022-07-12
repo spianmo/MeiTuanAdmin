@@ -210,9 +210,12 @@
                 mdui.alert("账号密码不能置空")
                 return;
             }
-            ipcRenderer.send('save-config', requestObject)
+            if (requestObject.username !== accountJar.username ||
+                requestObject.password !== accountJar.password) {
+                ipcRenderer.send('save-config', requestObject)
+                ipcRenderer.send('clearAllCookie')
+            }
             ipcRenderer.send('closeLogin')
-            ipcRenderer.send('clearAllCookie')
             ipcRenderer.send('openMeiTuanLogin', requestObject)
         } else {
 
