@@ -211,6 +211,7 @@
                 return;
             }
             ipcRenderer.send('save-config', requestObject)
+            ipcRenderer.send('closeLogin')
             ipcRenderer.send('openMeiTuanLogin', requestObject)
         } else {
 

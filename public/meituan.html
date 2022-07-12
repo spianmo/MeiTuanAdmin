@@ -34,10 +34,14 @@
     webview.addEventListener('ipc-message', (res) => {
         console.log("cookie: ", res.args[0])
         ipcRenderer.send('closeMeiTuanLogin');
+        ipcRenderer.send('showMainWindow');
     })
     webview.addEventListener('did-navigate', (res) => {
         if (res.url.indexOf('/login/continue') !== -1) {
             webview.send('getCookie')
+        } else {
+            //ipcRenderer.send('closeMeiTuanLogin');
+            //ipcRenderer.send('showLoginWindow');
         }
     });
 </script>

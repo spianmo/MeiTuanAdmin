@@ -3,6 +3,7 @@ import {app, BrowserWindow, dialog, ipcMain, shell} from "electron";
 import appStoreFs from "fs";
 import {debug, log} from "electron-log";
 import {appConf} from "../configuration";
+import {closeLoginWindow, closeMainWindow, createLoginWindow, createMainWindow, showMainWindow} from "../index";
 
 function msg(str: string) {
     const options =
@@ -84,7 +85,7 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
         },
     })
     mtLoginWindow.loadFile(appConf.meituanHtml)
-    mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    //mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     mtLoginWindow.on('ready-to-show', function () {
         mtLoginWindow.webContents.send('receiveCookie', arg);
         mtLoginWindow?.show()
@@ -93,4 +94,20 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
 
 ipcMain.on('closeMeiTuanLogin', (event, arg) => {
     mtLoginWindow?.close()
+})
+
+ipcMain.on('closeLogin', (event, arg) => {
+    closeLoginWindow()
+})
+
+ipcMain.on('showLoginWindow', (event, arg) => {
+    createLoginWindow()
+})
+
+ipcMain.on('showMainWindow', (event, arg) => {
+    createMainWindow()
+})
+
+ipcMain.on('closeMainWindow', (event, arg) => {
+    closeMainWindow()
 })
