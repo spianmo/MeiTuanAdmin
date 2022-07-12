@@ -78,10 +78,12 @@ ipcMain.on('get-meituan-cookie', (event, arg) => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            webviewTag: true,
+            //preload: appConf.loginwrapper
         },
     })
 
-    childWindow.loadURL(`https://e.waimai.meituan.com/new_fe/login#/login`)
+    childWindow.loadFile(appConf.meituanHtml)
     childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     childWindow.on('ready-to-show', function () {
         childWindow?.show()

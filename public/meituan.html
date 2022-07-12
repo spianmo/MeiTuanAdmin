@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LoginWrapper</title>
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <script src="js/mdui.js"></script>
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+</head>
+<body style="margin: 0;padding: 0">
+<div style="width: 100vw; height: 100vh">
+    <webview id="webview" src="https://e.waimai.meituan.com/new_fe/login#/login" preload="./app.asar/public/js/loginWrapper.js" style="height: 100vh;width: 100vw"></webview>
+</div>
+</body>
+<script>
+    if (typeof module === 'object') {
+        window.jQuery = window.$ = module.exports;
+    }
+    const {clipboard, remote, Menu, MenuItem} = require('electron');
+
+    const webview = $('#webview');
+    webview.on('dom-ready', function () {
+        console.log("ready")
+    });
+
+    webview.on('page-title-updated', function () {
+        console.log(webview.getTitle());
+    });
+    webview.on('did-start-loading', function () {
+        console.log("start-loading")
+    });
+    webview[0].addEventListener('did-navigate', (res) => {
+        console.log("updateUrl", res.url)
+    });
+</script>
+</html>

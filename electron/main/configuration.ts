@@ -13,15 +13,19 @@ export class Configuration {
     dock: string
     indexHtml: string
     loginHtml: string
+    meituanHtml: string
     preload: string
     url: string
+    loginwrapper: string
 
     constructor() {
         this.icon = join(ROOT_PATH.public, 'favicon.ico');
         this.dock = join(ROOT_PATH.public, 'dock.ico')
         this.indexHtml = join(ROOT_PATH.dist, 'index.html')
         this.loginHtml = join(ROOT_PATH.public, 'login.html')
+        this.meituanHtml = join(ROOT_PATH.public, 'meituan.html')
         this.preload = join(__dirname, '../preload/index.js')
+        this.loginwrapper = join(ROOT_PATH.public, 'preload.js')
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
         this.url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
     }
