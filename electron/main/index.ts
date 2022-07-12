@@ -48,9 +48,9 @@ function _createLoginWindow() {
     loginWindow.on("close", () => {
         loginWindow = null
     })
-    loginWindow.webContents.openDevTools({
-        mode: 'detach'
-    })
+    // loginWindow.webContents.openDevTools({
+    //     mode: 'detach'
+    // })
 }
 
 function _createMainWindow() {
