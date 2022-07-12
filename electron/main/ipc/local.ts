@@ -72,3 +72,18 @@ ipcMain.on('open-win', (event, arg) => {
         childWindow?.show()
     })
 })
+
+ipcMain.on('get-meituan-cookie', (event, arg) => {
+    const childWindow = new BrowserWindow({
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+    })
+
+    childWindow.loadURL(`https://e.waimai.meituan.com/new_fe/login#/login`)
+    childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    childWindow.on('ready-to-show', function () {
+        childWindow?.show()
+    })
+})

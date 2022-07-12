@@ -207,28 +207,29 @@
                 mdui.alert("账号密码不能置空")
                 return;
             }
-            ajax(requestObject, function (responseObject) {
-                if (responseObject.code === 200) {
-                    //登陆成功
-                    pageData.store_username = requestObject.username
-                    pageData.store_passwd = requestObject.password
-                    pageData.token = responseObject.data.token
-                    pageData.data = responseObject.data
-                    console.log(responseObject.data.token)
-                    console.log(responseObject.data)
-                    localStorage.setItem("token", pageData.token)
-                    localStorage.setItem("pageData", JSON.stringify(responseObject.data))
-                    ipcRenderer.send("save-config", pageData)
-                    mdui.snackbar("登陆成功")
-                    $(function () {
-                        setTimeout(function () {
-                            ipcRenderer.send("login-success-message", responseObject.data)
-                        }, 1000)
-                    })
-                } else {
-                    mdui.alert(responseObject.message)
-                }
-            }, errFunc)
+            ipcRenderer.send('get-meituan-cookie')
+            // ajax(requestObject, function (responseObject) {
+            //     if (responseObject.code === 200) {
+            //         //登陆成功
+            //         pageData.store_username = requestObject.username
+            //         pageData.store_passwd = requestObject.password
+            //         pageData.token = responseObject.data.token
+            //         pageData.data = responseObject.data
+            //         console.log(responseObject.data.token)
+            //         console.log(responseObject.data)
+            //         localStorage.setItem("token", pageData.token)
+            //         localStorage.setItem("pageData", JSON.stringify(responseObject.data))
+            //         ipcRenderer.send("save-config", pageData)
+            //         mdui.snackbar("登陆成功")
+            //         $(function () {
+            //             setTimeout(function () {
+            //                 ipcRenderer.send("login-success-message", responseObject.data)
+            //             }, 1000)
+            //         })
+            //     } else {
+            //         mdui.alert(responseObject.message)
+            //     }
+            // }, errFunc)
         } else {
 
         }

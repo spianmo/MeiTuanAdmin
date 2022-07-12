@@ -48,9 +48,9 @@ function _createLoginWindow() {
     loginWindow.on("close", () => {
         loginWindow = null
     })
-    loginWindow.webContents.openDevTools({
-        mode: 'detach'
-    })
+    // loginWindow.webContents.openDevTools({
+    //     mode: 'detach'
+    // })
 }
 
 function _createMainWindow() {
@@ -88,7 +88,7 @@ function _createMainWindow() {
 
 app.on('ready', async () => {
     setTray();
-    await _createMainWindow();
+    await _createLoginWindow();
 });
 
 app.on('window-all-closed', () => {
