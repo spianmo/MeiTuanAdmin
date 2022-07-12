@@ -48,9 +48,9 @@ function _createLoginWindow() {
     loginWindow.on("close", () => {
         loginWindow = null
     })
-    // loginWindow.webContents.openDevTools({
-    //     mode: 'detach'
-    // })
+    loginWindow.webContents.openDevTools({
+        mode: 'detach'
+    })
 }
 
 function _createMainWindow() {
@@ -81,7 +81,7 @@ function _createMainWindow() {
         })
     }
 
-    mainWindow.on('ready-to-show', function () {
+    mainWindow.on('ready-to-show', () => {
         mainWindow?.show()
     })
 }

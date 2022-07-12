@@ -151,16 +151,19 @@
 
     const {ipcRenderer} = require('electron');
 
-    let pageData = {
-        store_username: '',
-        store_passwd: '',
-        token: '',
+    let accountJar = {
+        username: '',
+        password: '',
+        cookie: '',
     };
 
     let isLogin = true;
 
-    ipcRenderer.on("get-config", (event, args) => {
-        pageData = args
+    ipcRenderer.send("get-config")
+
+    ipcRenderer.on("reply-config", (event, args) => {
+        console.log("reply-config", args)
+        accountJar = args
     })
 
     /* 初始化全局禁止右击和拖动a标签 */
@@ -170,13 +173,13 @@
         });
         $(function () {
             setTimeout(function () {
-                if (pageData.store_username !== '') {
+                if (accountJar.username !== '') {
                     $("#username-label").addClass('mdui-textfield-not-empty')
-                    $("#username").val(pageData.store_username)
+                    $("#username").val(accountJar.username)
                 }
-                if (pageData.store_passwd !== '') {
+                if (accountJar.password !== '') {
                     $("#passwd-label").addClass('mdui-textfield-not-empty')
-                    $("#passwd").val(pageData.store_passwd)
+                    $("#passwd").val(accountJar.password)
                 }
             }, 800)
         })
@@ -207,29 +210,8 @@
                 mdui.alert("账号密码不能置空")
                 return;
             }
-            ipcRenderer.send('get-meituan-cookie')
-            // ajax(requestObject, function (responseObject) {
-            //     if (responseObject.code === 200) {
-            //         //登陆成功
-            //         pageData.store_username = requestObject.username
-            //         pageData.store_passwd = requestObject.password
-            //         pageData.token = responseObject.data.token
-            //         pageData.data = responseObject.data
-            //         console.log(responseObject.data.token)
-            //         console.log(responseObject.data)
-            //         localStorage.setItem("token", pageData.token)
-            //         localStorage.setItem("pageData", JSON.stringify(responseObject.data))
-            //         ipcRenderer.send("save-config", pageData)
-            //         mdui.snackbar("登陆成功")
-            //         $(function () {
-            //             setTimeout(function () {
-            //                 ipcRenderer.send("login-success-message", responseObject.data)
-            //             }, 1000)
-            //         })
-            //     } else {
-            //         mdui.alert(responseObject.message)
-            //     }
-            // }, errFunc)
+            ipcRenderer.send('save-config', requestObject)
+            ipcRenderer.send('openMeiTuanLogin', requestObject)
         } else {
 
         }
@@ -250,20 +232,6 @@
     $('#forgot-btn').click(function () {
         mdui.alert("请联系工作室负责人")
     })
-
-
-    function ajax(jsonObject, success, error) {
-        console.log(jsonObject)
-        $.ajax({
-            method: 'POST',
-            url: conf.baseUrl + './api/user/login',
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify(jsonObject),
-            timeout: 500,
-            success: success,
-            error: error
-        });
-    }
 
 
     /* Send a message */

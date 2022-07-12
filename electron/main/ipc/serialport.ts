@@ -21,9 +21,9 @@ async function listSerialPorts() {
 
 // Set a timeout that will check for new serialPorts every 2 seconds.
 // This timeout reschedules itself.
-setTimeout(async function listPorts() {
-    setTimeout(listPorts, 400)
-    const ports = await listSerialPorts()
-
-    BrowserWindow.getFocusedWindow()?.webContents.send('serialport', JSON.stringify(ports))
-}, 99)
+// setTimeout(async function listPorts() {
+//     setTimeout(listPorts, 400)
+//     const ports = await listSerialPorts()
+//
+//     BrowserWindow.getFocusedWindow()?.webContents.send('serialport', JSON.stringify(ports))
+// }, 99)

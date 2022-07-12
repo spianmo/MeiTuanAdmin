@@ -33,10 +33,9 @@ ipcMain.on('get-config', (event, arg) => {
         } else {
             debug("read config json:" + data)
             profile = JSON.parse(data);
+            event.reply("reply-config", profile)
         }
     });
-    event.reply("get-config", profile)
-    event.returnValue = profile;
 })
 
 ipcMain.on('save-config', (event, arg) => {
@@ -73,19 +72,25 @@ ipcMain.on('open-win', (event, arg) => {
     })
 })
 
-ipcMain.on('get-meituan-cookie', (event, arg) => {
-    const childWindow = new BrowserWindow({
+let mtLoginWindow: BrowserWindow | null = null
+
+ipcMain.on('openMeiTuanLogin', (event, arg) => {
+    mtLoginWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             webviewTag: true,
-            //preload: appConf.loginwrapper
+            //preload: appConf.mtloginWrapper
         },
     })
-
-    childWindow.loadFile(appConf.meituanHtml)
-    childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-    childWindow.on('ready-to-show', function () {
-        childWindow?.show()
+    mtLoginWindow.loadFile(appConf.meituanHtml)
+    mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    mtLoginWindow.on('ready-to-show', function () {
+        mtLoginWindow.webContents.send('receiveCookie', arg);
+        mtLoginWindow?.show()
     })
+})
+
+ipcMain.on('closeMeiTuanLogin', (event, arg) => {
+    mtLoginWindow?.close()
 })

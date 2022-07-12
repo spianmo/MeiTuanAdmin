@@ -11,37 +11,34 @@
 </head>
 <body style="margin: 0;padding: 0">
 <div style="width: 100vw; height: 100vh">
-    <webview id="loginWrapper" src="https://epassport.meituan.com/account/unitivelogin?bg_source=3&service=waimai&platform=2&continue=https://e.waimai.meituan.com%2Fnew_fe%2Flogin%23%2Flogin%2Fcontinue&left_bottom_link=%2Faccount%2Funitivesignup%3Fbg_source%3D3%26service%3Dwaimai%26platform%3D2%26extChannel%3Dwaimaie%26ext_sign_up_channel%3Dwaimaie%26continue%3Dhttps%3A%2F%2Fe.waimai.meituan.com%2Fv2%2Fepassport%2FsignUp&right_bottom_link=%2Faccount%2Funitiverecover%3Fbg_source%3D3%26service%3Dwaimai%26platform%3D2%26continue%3Dhttps%3A%2F%2Fe.waimai.meituan.com%252Fnew_fe%252Flogin%2523%252Flogin%252Frecover" preload="./js/loginWrapper.js" style="height: 100vh;width: 100vw"></webview>
+    <webview id="loginWrapper"
+             src="https://epassport.meituan.com/account/unitivelogin?bg_source=3&service=waimai&platform=2&continue=https://e.waimai.meituan.com%2Fnew_fe%2Flogin%23%2Flogin%2Fcontinue&left_bottom_link=%2Faccount%2Funitivesignup%3Fbg_source%3D3%26service%3Dwaimai%26platform%3D2%26extChannel%3Dwaimaie%26ext_sign_up_channel%3Dwaimaie%26continue%3Dhttps%3A%2F%2Fe.waimai.meituan.com%2Fv2%2Fepassport%2FsignUp&right_bottom_link=%2Faccount%2Funitiverecover%3Fbg_source%3D3%26service%3Dwaimai%26platform%3D2%26continue%3Dhttps%3A%2F%2Fe.waimai.meituan.com%252Fnew_fe%252Flogin%2523%252Flogin%252Frecover"
+             preload="./js/loginWrapper.js" style="height: 100vh;width: 100vw"></webview>
 </div>
 </body>
 <script>
-    if (typeof module === 'object') {
-        window.jQuery = window.$ = module.exports;
-    }
-    const {clipboard, remote, Menu, MenuItem} = require('electron');
+
+    const {clipboard, remote, Menu, MenuItem, ipcRenderer} = require('electron');
+
+    let accountObject = {}
+
+    ipcRenderer.on('receiveCookie', (e, arg) => {
+        accountObject = arg
+    });
 
     const webview = document.getElementById('loginWrapper')
+    webview.addEventListener('dom-ready', () => {
+        //webview.openDevTools();
+        webview.send('sendAccount', accountObject)
+    });
     webview.addEventListener('ipc-message', (res) => {
-        console.log("!!!!!!!!!", res)
+        console.log("cookie: ", res.args[0])
+        ipcRenderer.send('closeMeiTuanLogin');
     })
-    webview.addEventListener('dom-ready', function () {
-        console.log("ready")
-    });
-
-    webview.addEventListener('page-title-updated', function () {
-        console.log(webview.getTitle());
-    });
-    webview.addEventListener('did-start-loading', function () {
-        console.log("start-loading")
-    });
     webview.addEventListener('did-navigate', (res) => {
         if (res.url.indexOf('/login/continue') !== -1) {
-            console.log('登陆成功')
             webview.send('getCookie')
         }
-        console.log("updateUrl", res.url)
     });
-    webview.openDevTools();
-
 </script>
 </html>
