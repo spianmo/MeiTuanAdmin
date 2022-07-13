@@ -145,9 +145,6 @@
 </div>
 </body>
 <script>
-    const conf = {
-        baseUrl: "http://127.0.0.1:9090/"
-    }
 
     const {ipcRenderer} = require('electron');
 
@@ -181,7 +178,7 @@
                     $("#passwd-label").addClass('mdui-textfield-not-empty')
                     $("#passwd").val(accountJar.password)
                 }
-            }, 800)
+            }, 100)
         })
     });
 
