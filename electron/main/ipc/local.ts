@@ -86,8 +86,8 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
     })
     mtLoginWindow.loadFile(appConf.meituanHtml)
     // mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
-    mtLoginWindow.on('ready-to-show', function () {
-        mtLoginWindow.webContents.send('receiveCookie', arg);
+    mtLoginWindow?.on('ready-to-show', function () {
+        mtLoginWindow?.webContents?.send('receiveCookie', arg);
         mtLoginWindow?.show()
     })
 })
@@ -113,18 +113,17 @@ ipcMain.on('closeMainWindow', (event, arg) => {
 })
 
 ipcMain.on('clearAllCookie', (event, arg) => {
-    // 查询所有 cookies。删除。
     session.defaultSession.cookies.get({})
         .then((cookies) => {
             cookies.forEach(cookie => {
                 let url = '';
                 // get prefix, like https://www.
-                url += cookie.secure ? 'https://' : 'http://';
-                url += cookie.domain.charAt(0) === '.' ? 'www' : '';
+                url += cookie?.secure ? 'https://' : 'http://';
+                url += cookie?.domain?.charAt(0) === '.' ? 'www' : '';
                 // append domain and path
-                url += cookie.domain;
-                url += cookie.path;
-                session.defaultSession.cookies.remove(url, cookie.name);
+                url += cookie?.domain ?? '';
+                url += cookie?.path ?? '';
+                session?.defaultSession?.cookies?.remove(url, cookie.name);
             })
             console.log("已清除Cookie")
         }).catch((error) => {
