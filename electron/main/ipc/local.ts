@@ -1,9 +1,10 @@
 /* Show a message box */
-import {app, BrowserWindow, dialog, ipcMain, shell, session} from "electron";
+import {app, BrowserWindow, dialog, ipcMain, session, shell} from "electron";
 import appStoreFs from "fs";
-import {debug, log} from "electron-log";
+import {debug, error} from "electron-log";
 import {appConf} from "../configuration";
 import {closeLoginWindow, closeMainWindow, createLoginWindow, createMainWindow, showMainWindow} from "../index";
+import _ from "lodash";
 
 function msg(str: string) {
     const options =
@@ -110,6 +111,75 @@ ipcMain.on('showMainWindow', (event, arg) => {
 
 ipcMain.on('closeMainWindow', (event, arg) => {
     closeMainWindow()
+})
+
+export let cookiesRawKV = []
+export let cookieJar = ""
+
+ipcMain.on('getCookieBySession', (event, arg) => {
+    session.defaultSession.cookies.get({})
+        .then((cookies) => {
+            cookiesRawKV = cookies
+            cookies.forEach(cookie => {
+                cookieJar += `${cookie.name}=${cookie.value}; `
+            })
+            console.log(cookieJar);
+        }).catch((error) => {
+        console.log(error)
+    })
+})
+
+function stringifyKV(obj) {
+    let str = ''
+    Object.keys(obj).forEach(key=>{
+        str += `${key}=${obj[key]}&`
+    })
+    return str.slice(0, -1)
+}
+
+function getOrderList(payload, cb) {
+    const request = require("request")
+    console.log(cookiesRawKV)
+    payload.region_id = cookiesRawKV.find(c=>c.name==='region_id').value
+    payload.region_version = cookiesRawKV.find(c=>c.name==='region_version').value
+    let header = {
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Connection": "keep-alive",
+        "Cookie": cookieJar,
+        "Host": "e.waimai.meituan.com",
+        "Referer": "https://e.waimai.meituan.com/new_fe/business_gw",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36",
+        "sec-ch-ua": '" Not;A Brand";v="99", "Microsoft Edge";v="103", "Chromium";v="103"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "Windows"
+    }
+    request({
+        url: 'https://e.waimai.meituan.com/gw/v2/order/common/history/all/r/list/common?' + stringifyKV(payload),
+        method: 'get',
+        headers: header,
+        jar: request.jar()
+    }, function (error, response, body) {
+        cb(JSON.parse(body))
+    });
+}
+
+ipcMain.on('getOrderList', (event, arg) => {
+    getOrderList(arg, (body)=>{
+        let _body = _.cloneDeep(body)
+        let _wmOrderList = _.cloneDeep(_body.data.wmOrderList)
+        _body.data.wmOrderList = []
+        _wmOrderList.forEach(order=>{
+            let _order = _.cloneDeep(order)
+            _order.commonInfo = JSON.parse(order.commonInfo)
+            _order.orderInfo = JSON.parse(order.orderInfo)
+            _body.data.wmOrderList.push(_order)
+        })
+        event.reply("onOrderListSend", _body)
+    })
 })
 
 ipcMain.on('clearAllCookie', (event, arg) => {

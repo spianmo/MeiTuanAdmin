@@ -1,3 +1,4 @@
+<script src="../../../../UserFolder/Desktop/美团外卖分析/index.ts"></script>
 <template>
   <div>
     <div class="container">
@@ -66,8 +67,21 @@ const GetByWhere = async () => {
   tableData.value = await db.collection('dict').find({value: {$gte: 3}}).toArray()
 }
 
+ipcRenderer.on("onOrderListSend", (event, args) => {
+  console.log(args)
+})
+
 onMounted(() => {
   getAll()
+  ipcRenderer.send("getOrderList", {
+    tag: "all",
+    startDate: "2022-07-14",
+    endDate: "2022-07-14",
+    nextLabel: '{"day":20220714,"day_seq":8,"page":0}',
+    userId: -1,
+    pageNum: 1,
+    pageSize: 10
+  })
 })
 
 const list = () => {

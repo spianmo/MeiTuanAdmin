@@ -39,8 +39,10 @@
         ipcRenderer.send('showMainWindow');
     })
     webview.addEventListener('did-navigate', (res) => {
-        if (res.url.indexOf('/login/continue') !== -1) {
+        console.log("!! ", res.url)
+        if (res.url.indexOf('https://e.waimai.meituan.com/?time=') !== -1) {
             webview.send('getCookie')
+            ipcRenderer.send('getCookieBySession');
         } else {
             //ipcRenderer.send('closeMeiTuanLogin');
             //ipcRenderer.send('showLoginWindow');
