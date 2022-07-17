@@ -1,4 +1,3 @@
-<script src="../../../../UserFolder/Desktop/美团外卖分析/index.ts"></script>
 <template>
   <div>
     <div class="container">
