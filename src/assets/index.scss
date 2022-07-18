@@ -9,7 +9,7 @@ $dimensions: (
         "m": "margin",
 );
 $borderColor: #dae2e6;
-$mainColor: #3e89f0;
+$mainColor: #f89800;
 
 @each $dim in $dimensions {
   @each $dir in $directions {

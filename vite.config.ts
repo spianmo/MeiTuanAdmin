@@ -4,11 +4,15 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
 import pkg from './package.json'
 import esmodule from 'vite-plugin-esmodule'
+import defineReactive from 'vite-plugin-vue3-define-reactive'
 
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        defineReactive({
+            debug: false
+        }),
         vue(),
         esmodule([
             'execa',

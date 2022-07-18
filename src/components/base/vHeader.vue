@@ -19,7 +19,7 @@ import {useStore} from 'vuex'
 import {onBeforeRouteUpdate} from "vue-router";
 
 const store = useStore()
-const currentLabel = ref('首页')
+const currentLabel = ref('历史订单')
 // const username = localStorage.getItem('ms_username')
 const collapse = computed(() => store.state.collapse)
 // 侧边栏折叠

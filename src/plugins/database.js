@@ -1,19 +1,17 @@
 import Dexie from 'dexie'
-import mongoify from 'dexie-mongoify'
+import 'dexie-mongoify'
 
 const dbName = 'electron-init'
 
 const db = new Dexie(dbName)
-const dbVersion = 1
+const dbVersion = 4
 
 function initDb() {
     db.version(dbVersion).stores({
-        dict: 'key, value',
-        logs: '++id, name, money, state, date',
+        orders: 'key, info, status, orderTime',
     })
     db.open().then(r => {
         console.log('db opened')
-        console.log(db)
     }).catch(error => {
         console.log('open db error:', error)
     })

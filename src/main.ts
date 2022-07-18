@@ -9,7 +9,13 @@ import './assets/css/base.css'
 import './esmodules'
 import './samples/node-api'
 
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
 const app = createApp(App)
+
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 // 初始化插件
 // Element-Plus
 installElementPlus(app)

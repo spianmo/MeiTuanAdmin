@@ -132,6 +132,9 @@ ipcMain.on('getCookieBySession', (event, arg) => {
 function stringifyKV(obj) {
     let str = ''
     Object.keys(obj).forEach(key=>{
+        if (typeof obj[key] === 'object') {
+            str += `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}&`
+        }
         str += `${key}=${obj[key]}&`
     })
     return str.slice(0, -1)
@@ -139,7 +142,7 @@ function stringifyKV(obj) {
 
 function getOrderList(payload, cb) {
     const request = require("request")
-    console.log(cookiesRawKV)
+    console.log(payload)
     payload.region_id = cookiesRawKV.find(c=>c.name==='region_id').value
     payload.region_version = cookiesRawKV.find(c=>c.name==='region_version').value
     let header = {
@@ -170,6 +173,11 @@ function getOrderList(payload, cb) {
 ipcMain.on('getOrderList', (event, arg) => {
     getOrderList(arg, (body)=>{
         let _body = _.cloneDeep(body)
+        if (!_body.data) {
+            console.log("###", JSON.stringify(_body))
+            event.reply("onOrderListSend", 'fuck')
+            return
+        }
         let _wmOrderList = _.cloneDeep(_body.data.wmOrderList)
         _body.data.wmOrderList = []
         _wmOrderList.forEach(order=>{
