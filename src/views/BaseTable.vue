@@ -20,7 +20,9 @@
         </div>
       </div>
       <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table' header-cell-class-name='table-header'>
-        <el-table-column sortable label='序号' prop='info.orderInfo.num'></el-table-column>
+        <el-table-column sortable label='当日序号' prop='info.orderInfo.num'>
+
+        </el-table-column>
         <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'></el-table-column>
         <el-table-column sortable label='订单时间' width="160" show-overflow-tooltip prop='info.orderInfo.order_time_fmt'></el-table-column>
         <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone'></el-table-column>
@@ -125,7 +127,6 @@ let fetchPayload ={
 }
 
 const startSpider = () => {
-  console.log()
   if (!Array.isArray(query.time) || query.time.length !== 2) {
     ElNotification({
       title: '错误',
@@ -187,6 +188,7 @@ ipcRenderer.on("onOrderListSend", async (event, args) => {
   }
   if (args.data.nextLabel) {
     setTimeout(()=>{
+      getData()
       fetchOrderData()
     }, randomTime() + 1000)
   }
