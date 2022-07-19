@@ -7,6 +7,8 @@
             type="daterange"
             unlink-panels
             @change="getData"
+            :editable="false"
+            :clearable="false"
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
@@ -22,12 +24,13 @@
     <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
               height="350px" size="small"
               header-cell-class-name='table-header'>
-      <el-table-column fixed sortable label='序号' prop='info.orderInfo.num'>
+      <el-table-column fixed sortable align="center" label='序号' prop='info.orderInfo.num'>
         <template #default='scope'>
           #{{ scope.row.info.orderInfo.num }}
         </template>
       </el-table-column>
-      <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'>
+      <el-table-column sortable show-overflow-tooltip label='订单号' prop='key'/>
+      <el-table-column sortable align="center" label='姓名' prop='info.orderInfo.recipient_name'>
         <template #default='scope'>
           <el-tooltip :content="scope.row.info.orderInfo.orderCopyContent">
             {{ scope.row.info.orderInfo.recipient_name }}
@@ -49,7 +52,7 @@
       </el-table-column>
       <el-table-column sortable align='center' label='状态'>
         <template #default='scope'>
-          <el-tag :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
+          <el-tag @click="updateOrderStatus(scope.row)" :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
             {{ scope.row.status }}
           </el-tag>
         </template>
@@ -75,7 +78,8 @@ import {db} from "../plugins/database";
 import {ElNotification} from "element-plus";
 
 const query = reactive({
-  time: [new Date(), new Date()],
+  time: [new Date(new Date().setHours(0, 0, 0, 0)),
+    new Date(new Date().setHours(0, 0, 0, 0))],
   page: 1,
   size: 9
 })
@@ -161,6 +165,20 @@ const fetchOrderData = () => {
   ipcRenderer.send("getOrderList", fetchPayload)
 }
 
+const stateMachine = ['未回访', '已回访', '未接听']
+
+const updateOrderStatus = async (order) => {
+  order.status = stateMachine[(stateMachine.findIndex(t => t === order.status) + 1) % 3]
+  console.log(order)
+  await updateOrder(order)
+  await getData()
+}
+
+const updateOrder = async (order) => {
+  return await db.collection('orders')
+      .update({ key: order.key }, {status: order.status})
+}
+
 const insertOrder = async (orderId, order) => {
   await db.collection('orders')
       .insert({
@@ -228,6 +246,7 @@ function pageOrderCount(query) {
       endDate
     }
   }
+  console.log(orderTime)
   return db.collection('orders')
       .where('orderTime')
       .between(orderTime.startDate, orderTime.endDate)
