@@ -1,74 +1,75 @@
 <template>
   <div class='container'>
-      <div class='handle-box'>
-        <div style="flex: 1;">
-          <el-date-picker
-              v-model="query.time"
-              type="daterange"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始时间"
-              end-placeholder="结束时间"
-              :disabled-date="disabledDate"
-          />
-        </div>
-        <div>
-          <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
-          <el-button type="primary" icon="Coin">查询本地数据</el-button>
-          <el-button type="info" icon="TakeawayBox" round>导出</el-button>
-          <el-button icon="Refresh" circle @click="getData"/>
-        </div>
+    <div class='handle-box'>
+      <div style="flex: 1;">
+        <el-date-picker
+            v-model="query.time"
+            type="daterange"
+            unlink-panels
+            range-separator="至"
+            start-placeholder="开始时间"
+            end-placeholder="结束时间"
+            :disabled-date="disabledDate"
+        />
       </div>
-      <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
-                height="350px" size="small"
-                header-cell-class-name='table-header'>
-        <el-table-column fixed sortable label='序号' prop='info.orderInfo.num'>
-          <template #default='scope'>
-            #{{scope.row.info.orderInfo.num}}
-          </template>
-        </el-table-column>
-        <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'>
-          <template #default='scope'>
-            <el-tooltip :content="scope.row.info.orderInfo.orderCopyContent">
-              {{scope.row.info.orderInfo.recipient_name}}
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column sortable label='订单时间' width="160" show-overflow-tooltip prop='info.orderInfo.order_time_fmt'></el-table-column>
-        <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone'></el-table-column>
-        <el-table-column align='center' label='备用号码' prop='info.orderInfo.recipient_bindedPhone'>
-          <template #default='scope'>
-            {{scope.row.info.orderInfo.recipient_bindedPhone ? scope.row.info.orderInfo.recipient_bindedPhone.replace('手机尾号','') : '无'}}
-          </template>
-        </el-table-column>
-        <el-table-column align='center' label='手机尾号' prop='info.orderInfo.recipient_phone'>
-          <template #default='scope'>
-            {{scope.row.info.orderInfo.recipient_phone.replace('手机尾号','')}}
-          </template>
-        </el-table-column>
-        <el-table-column sortable align='center' label='状态'>
-          <template #default='scope'>
-            <el-tag :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
-              {{ scope.row.status  }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" align='center' label='操作' width='120'>
-          <template #default='scope'>
-            <el-link text='一键拨号' type='primary' @click='callPhone(scope.$index, scope.row)'>一键拨号</el-link>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class='pagination'>
-        <el-pagination :current-page='query.page' :page-size='query.size' :total='pageTotal'
-                       background layout='total, prev, pager, next'
-                       @current-change='handlePageChange'></el-pagination>
+      <div>
+        <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
+        <el-button type="primary" icon="Coin" @click="getData">查询本地数据</el-button>
+        <el-button type="info" icon="TakeawayBox" round>导出</el-button>
+        <el-button icon="Refresh" circle @click="getData"/>
       </div>
     </div>
+    <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
+              height="350px" size="small"
+              header-cell-class-name='table-header'>
+      <el-table-column fixed sortable label='序号' prop='info.orderInfo.num'>
+        <template #default='scope'>
+          #{{ scope.row.info.orderInfo.num }}
+        </template>
+      </el-table-column>
+      <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'>
+        <template #default='scope'>
+          <el-tooltip :content="scope.row.info.orderInfo.orderCopyContent">
+            {{ scope.row.info.orderInfo.recipient_name }}
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column sortable label='订单时间' width="160" show-overflow-tooltip
+                       prop='info.orderInfo.order_time_fmt'></el-table-column>
+      <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone' show-overflow-tooltip></el-table-column>
+      <el-table-column align='center' label='备用号码' prop='info.orderInfo.recipient_bindedPhone'>
+        <template #default='scope'>
+          {{ scope.row.info.orderInfo.recipient_bindedPhone ? scope.row.info.orderInfo.recipient_bindedPhone.replace('手机尾号', '') : '无' }}
+        </template>
+      </el-table-column>
+      <el-table-column align='center' label='手机尾号' prop='info.orderInfo.recipient_phone'>
+        <template #default='scope'>
+          {{ scope.row.info.orderInfo.recipient_phone.replace('手机尾号', '') }}
+        </template>
+      </el-table-column>
+      <el-table-column sortable align='center' label='状态'>
+        <template #default='scope'>
+          <el-tag :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
+            {{ scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" align='center' label='操作' width='120'>
+        <template #default='scope'>
+          <el-link text='一键拨号' type='primary' @click='callPhone(scope.$index, scope.row)'>一键拨号</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class='pagination'>
+      <el-pagination :current-page='query.page' :page-size='query.size' :total='pageTotal'
+                     background layout='total, prev, pager, next'
+                     @current-change='handlePageChange'></el-pagination>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import {onMounted, reactive, ref, unref} from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import {ipcRenderer} from "electron";
 import {db} from "../plugins/database";
 import {ElNotification} from "element-plus";
@@ -76,7 +77,7 @@ import {ElNotification} from "element-plus";
 const query = reactive({
   time: [new Date(), new Date()],
   page: 1,
-  size: 6
+  size: 9
 })
 
 const tableData = ref([])
@@ -92,7 +93,7 @@ const getData = async () => {
     pageTotal.value = count
     pageQueryOrders(query).then(data => {
       tableData.value = data
-      setTimeout(()=>{
+      setTimeout(() => {
         state.loading = false
       }, 200)
     })
@@ -127,7 +128,7 @@ const formatTime = (data) => {
   return year + "-" + month + "-" + _date
 }
 
-let fetchPayload ={
+let fetchPayload = {
   tag: "complete",
   startDate: "",
   endDate: "",
@@ -145,7 +146,7 @@ const startSpider = () => {
     })
     return
   }
-  fetchPayload ={
+  fetchPayload = {
     tag: "complete",
     startDate: formatTime(query.time[0]),
     endDate: formatTime(query.time[1]),
@@ -174,7 +175,7 @@ const insertOrder = async (orderId, order) => {
 }
 
 ipcRenderer.on("onOrderListSend", async (event, args) => {
-  console.log("接收的数据",args)
+  console.log("接收的数据", args)
   if (args === 'fuck') {
     ElNotification({
       title: '数据爬取',
@@ -196,7 +197,7 @@ ipcRenderer.on("onOrderListSend", async (event, args) => {
     await insertOrder(order.orderInfo.wm_order_id_view_str, order)
   }
   if (args.data.nextLabel) {
-    setTimeout(()=>{
+    setTimeout(() => {
       getData()
       fetchOrderData()
     }, randomTime() + 1000)
@@ -215,18 +216,49 @@ onMounted(() => {
 })
 
 function pageOrderCount(query) {
-  return db.collection('orders').count()
+  let condition = {}
+  if (query.time.length === 2) {
+    let startDate = Math.round(query.time[0].getTime() / 1000)
+    let endDate = Math.round(query.time[1].getTime() / 1000)
+
+    if (startDate === endDate) {
+      endDate += 24 * 3600
+    }
+
+    condition.orderTime = {
+      $gte: startDate,
+      $lte: endDate
+    }
+  }
+  return db.collection('orders')
+      .find(condition)
+      .count()
 }
 
 const pageQueryOrders = async () => {
-  console.log(db.collection('orders'))
-  let array = await db.collection('orders')
-      .offset((query.page - 1) * query.size)
-      .limit(query.size)
+  let condition = {}
+  if (query.time.length === 2) {
+    let startDate = Math.round(query.time[0].getTime() / 1000)
+    let endDate = Math.round(query.time[1].getTime() / 1000)
+
+    if (startDate === endDate) {
+      endDate += 24 * 3600
+    }
+
+    condition.orderTime = {
+      $gte: startDate,
+      $lte: endDate
+    }
+  }
+
+  console.log(await db.collection('orders'))
+
+  return await db.collection('orders')
+      //.find(condition)
+      .orderBy('orderTime')
       .reverse()
-      .sortBy('orderTime')
-  console.log(array)
-  return array
+      .offset((query.page - 1) * query.size)
+      .limit(query.size).toArray()
 }
 
 const callPhone = (index, row) => {
@@ -240,6 +272,7 @@ const callPhone = (index, row) => {
   :deep(.el-range__icon) {
     height: auto;
   }
+
   :deep(.el-range__close-icon) {
     height: auto;
   }
