@@ -6,6 +6,7 @@
             v-model="query.time"
             type="daterange"
             unlink-panels
+            @change="getData"
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
@@ -16,7 +17,6 @@
         <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
         <el-button type="primary" icon="Coin" @click="getData">查询本地数据</el-button>
         <el-button type="info" icon="TakeawayBox" round>导出</el-button>
-        <el-button icon="Refresh" circle @click="getData"/>
       </div>
     </div>
     <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
@@ -216,46 +216,41 @@ onMounted(() => {
 })
 
 function pageOrderCount(query) {
-  let condition = {}
+  let orderTime = {}
   if (query.time.length === 2) {
     let startDate = Math.round(query.time[0].getTime() / 1000)
     let endDate = Math.round(query.time[1].getTime() / 1000)
 
-    if (startDate === endDate) {
-      endDate += 24 * 3600
-    }
+    endDate += 24 * 3600
 
-    condition.orderTime = {
-      $gte: startDate,
-      $lte: endDate
+    orderTime = {
+      startDate,
+      endDate
     }
   }
   return db.collection('orders')
-      .find(condition)
+      .where('orderTime')
+      .between(orderTime.startDate, orderTime.endDate)
       .count()
 }
 
 const pageQueryOrders = async () => {
-  let condition = {}
+  let orderTime = {}
   if (query.time.length === 2) {
     let startDate = Math.round(query.time[0].getTime() / 1000)
     let endDate = Math.round(query.time[1].getTime() / 1000)
 
-    if (startDate === endDate) {
-      endDate += 24 * 3600
-    }
+    endDate += 24 * 3600
 
-    condition.orderTime = {
-      $gte: startDate,
-      $lte: endDate
+    orderTime = {
+      startDate,
+      endDate
     }
   }
 
-  console.log(await db.collection('orders'))
-
   return await db.collection('orders')
-      //.find(condition)
-      .orderBy('orderTime')
+      .where('orderTime')
+      .between(orderTime.startDate, orderTime.endDate)
       .reverse()
       .offset((query.page - 1) * query.size)
       .limit(query.size).toArray()
