@@ -202,6 +202,11 @@ ipcMain.on('getPoiInfo', async (event, arg) => {
 })
 
 ipcMain.on('clearAllCookie', (event, arg) => {
+    session.defaultSession.clearStorageData({
+        storages: [
+            'indexdb'
+        ]
+    });
     session.defaultSession.cookies.get({})
         .then((cookies) => {
             cookies.forEach(cookie => {
