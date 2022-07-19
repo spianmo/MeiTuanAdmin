@@ -190,6 +190,17 @@ ipcMain.on('getOrderList', (event, arg) => {
     })
 })
 
+let poiInfo = {}
+
+ipcMain.on('sendPoiInfo', (event, arg) => {
+    poiInfo = arg
+    console.log('sendPoiInfo', poiInfo)
+})
+
+ipcMain.on('getPoiInfo', async (event, arg) => {
+    event.reply("onPoiInfoSend", poiInfo)
+})
+
 ipcMain.on('clearAllCookie', (event, arg) => {
     session.defaultSession.cookies.get({})
         .then((cookies) => {

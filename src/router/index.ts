@@ -14,7 +14,7 @@ const routes = [
                 path: '/baseTable',
                 name: 'baseTable',
                 meta: {
-                    title: '订单列表',
+                    title: '美团外卖订单',
                     icon: 'el-icon-document-copy'
                 },
                 component: () => import ('../views/BaseTable.vue')

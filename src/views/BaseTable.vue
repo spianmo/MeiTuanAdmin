@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <div class='container'>
+  <div class='container'>
       <div class='handle-box'>
         <div style="flex: 1;">
           <el-date-picker
@@ -14,16 +13,27 @@
           />
         </div>
         <div>
-          <el-button type='primary' @click='startSpider' plain>爬取选中日期的订单数据</el-button>
-          <el-button type="primary">查询本地数据</el-button>
+          <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
+          <el-button type="primary" icon="Coin">查询本地数据</el-button>
+          <el-button type="info" icon="TakeawayBox" round>导出</el-button>
           <el-button icon="Refresh" circle @click="getData"/>
         </div>
       </div>
-      <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table' header-cell-class-name='table-header'>
-        <el-table-column sortable label='当日序号' prop='info.orderInfo.num'>
-
+      <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
+                height="350px" size="small"
+                header-cell-class-name='table-header'>
+        <el-table-column fixed sortable label='序号' prop='info.orderInfo.num'>
+          <template #default='scope'>
+            #{{scope.row.info.orderInfo.num}}
+          </template>
         </el-table-column>
-        <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'></el-table-column>
+        <el-table-column sortable label='姓名' prop='info.orderInfo.recipient_name'>
+          <template #default='scope'>
+            <el-tooltip :content="scope.row.info.orderInfo.orderCopyContent">
+              {{scope.row.info.orderInfo.recipient_name}}
+            </el-tooltip>
+          </template>
+        </el-table-column>
         <el-table-column sortable label='订单时间' width="160" show-overflow-tooltip prop='info.orderInfo.order_time_fmt'></el-table-column>
         <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone'></el-table-column>
         <el-table-column align='center' label='备用号码' prop='info.orderInfo.recipient_bindedPhone'>
@@ -43,7 +53,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align='center' label='操作' width='120'>
+        <el-table-column fixed="right" align='center' label='操作' width='120'>
           <template #default='scope'>
             <el-link text='一键拨号' type='primary' @click='callPhone(scope.$index, scope.row)'>一键拨号</el-link>
           </template>
@@ -55,7 +65,6 @@
                        @current-change='handlePageChange'></el-pagination>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -67,7 +76,7 @@ import {ElNotification} from "element-plus";
 const query = reactive({
   time: [new Date(), new Date()],
   page: 1,
-  size: 5
+  size: 6
 })
 
 const tableData = ref([])

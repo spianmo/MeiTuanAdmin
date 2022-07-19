@@ -5,7 +5,7 @@
       <i v-if='!collapse' class='el-icon-s-fold'></i>
       <i v-else class='el-icon-s-unfold'></i>
     </div>
-    <div class='logo'>{{ currentLabel }}</div>
+    <div class='logo'>{{ state.currentLabel }}</div>
 
     <div class='header-right'>
       <div class='header-user-con'>
@@ -17,24 +17,33 @@
 import {computed, onMounted, ref} from 'vue'
 import {useStore} from 'vuex'
 import {onBeforeRouteUpdate} from "vue-router";
+import {ipcRenderer} from "electron";
 
 const store = useStore()
-const currentLabel = ref('历史订单')
-// const username = localStorage.getItem('ms_username')
+const state = defineReactive({
+  currentLabel: '美团外卖订单'
+})
+
 const collapse = computed(() => store.state.collapse)
 // 侧边栏折叠
 const collapseChange = () => {
   store.commit('handleCollapse', !collapse.value)
 }
 
+ipcRenderer.on("onPoiInfoSend", async (event, args) => {
+  console.log("onPoiInfoSend", args)
+  state.currentLabel = args.name
+})
+
 onMounted(() => {
+  ipcRenderer.send("getPoiInfo")
   if (document.body.clientWidth < 1500) {
     collapseChange()
   }
 })
 
 onBeforeRouteUpdate((to) => {
-  currentLabel.value = to.meta.title;
+  state.currentLabel.value = to.meta.title;
 });
 
 </script>

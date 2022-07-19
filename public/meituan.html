@@ -32,13 +32,20 @@
         //webview.openDevTools();
         webview.send('sendAccount', accountObject)
     });
-    webview.addEventListener('ipc-message', (res) => {
+    webview.addEventListener('ipc-message', async (res) => {
         //接收到COOKIE后关闭 美团登录页 并展示主窗口，否则一直展示
         console.log("cookie: ", res.args[0])
+        let wmPoiName = await webview.executeJavaScript(`localStorage.getItem('wmPoiName')`)
+        let POI_LOGO_URL = await webview.executeJavaScript(`localStorage.getItem('POI_LOGO_URL')`)
+        let wmObj = {
+            name: wmPoiName,
+            logo: POI_LOGO_URL,
+        }
+        ipcRenderer.send('sendPoiInfo', wmObj)
         ipcRenderer.send('closeMeiTuanLogin');
         ipcRenderer.send('showMainWindow');
     })
-    webview.addEventListener('did-navigate', (res) => {
+    webview.addEventListener('did-navigate',  (res) => {
         console.log("!! ", res.url)
         if (res.url.indexOf('https://e.waimai.meituan.com/?time=') !== -1) {
             webview.send('getCookie')
