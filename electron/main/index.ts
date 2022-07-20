@@ -57,7 +57,7 @@ function _createLoginWindow() {
 
 function _createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: '美团商家',
+        title: '美团商家回访工具',
         width: 1000,
         height: 600,
         minHeight: 480,
