@@ -42,7 +42,7 @@
   </div>
 </template>
 <script setup>
-import {computed, onMounted} from 'vue'
+import {computed, onMounted, reactive} from 'vue'
 import {useStore} from 'vuex'
 import {onBeforeRouteUpdate} from "vue-router";
 import {ipcRenderer} from "electron";
@@ -50,7 +50,7 @@ import currentDevice, {checkConnectionTask, getCallState, hangUpCall} from "../.
 import {ElNotification} from "element-plus";
 
 const store = useStore()
-const state = defineReactive({
+let state = reactive({
   currentLabel: '美团外卖订单',
   options: [],
   device: {},
@@ -126,9 +126,9 @@ const hangUp = async () => {
 
 onMounted(() => {
   discoverDevice()
-  setTimeout(async () => {
+  setInterval(async () => {
     state.callState = await getCallState()
-  }, 1000)
+  }, 600)
   ipcRenderer.send("getPoiInfo")
   if (document.body.clientWidth < 1500) {
     collapseChange()

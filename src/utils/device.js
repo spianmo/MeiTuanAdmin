@@ -53,7 +53,6 @@ export const getCallState = async () => {
     let mCallState = await adbShell(currentDevice.deviceId, `dumpsys telephony.registry | grep "mCallState"`)
     let result = mCallState.split('\n')[0].split('=')[1].trim()
     let callStateMap = ['未通话', '响铃中', '通话中', '未知']
-    console.log(callStateMap[result ?? 3])
     return callStateMap[result ?? 3]
 }
 

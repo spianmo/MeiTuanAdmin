@@ -1,10 +1,12 @@
 /* Show a message box */
 import {app, BrowserWindow, dialog, ipcMain, session, shell} from "electron";
 import appStoreFs from "fs";
-import {debug, error} from "electron-log";
+import {debug} from "electron-log";
 import {appConf} from "../configuration";
 import {closeLoginWindow, closeMainWindow, createLoginWindow, createMainWindow, showMainWindow} from "../index";
 import _ from "lodash";
+import Cookie = Electron.Cookie;
+import IpcMainEvent = Electron.IpcMainEvent;
 
 function msg(str: string) {
     const options =
@@ -50,6 +52,34 @@ ipcMain.on('save-config', (event, arg) => {
             debug(err);
         } else {
             debug("配置保存成功")
+        }
+    })
+})
+
+ipcMain.on('get-oa-config', (event, arg) => {
+    let profile = {}
+    if (appStoreFs == null) return
+    appStoreFs.readFile('oa-config.json', 'utf-8', function (err, data) {
+        if (err) {
+            debug("读取OA json配置文件失败")
+        } else {
+            debug("read config json:" + data)
+            profile = JSON.parse(data);
+            event.reply("reply-oa-config", profile)
+        }
+    });
+})
+
+ipcMain.on('save-oa-config', (event, arg) => {
+    if (appStoreFs == null) {
+        debug("fs 载入失败")
+        return;
+    }
+    appStoreFs.writeFile("oa-config.json", JSON.stringify(arg, null, "  "), function (err) {
+        if (err) {
+            debug(err);
+        } else {
+            debug("OA配置保存成功")
         }
     })
 })
@@ -113,12 +143,12 @@ ipcMain.on('closeMainWindow', (event, arg) => {
     closeMainWindow()
 })
 
-export let cookiesRawKV = []
-export let cookieJar = ""
+export let cookiesRawKV: Cookie[] = []
+export let cookieJar: string = ""
 
 ipcMain.on('getCookieBySession', (event, arg) => {
     session.defaultSession.cookies.get({})
-        .then((cookies) => {
+        .then((cookies: Cookie[]) => {
             cookiesRawKV = cookies
             cookies.forEach(cookie => {
                 cookieJar += `${cookie.name}=${cookie.value}; `
@@ -129,9 +159,9 @@ ipcMain.on('getCookieBySession', (event, arg) => {
     })
 })
 
-function stringifyKV(obj) {
-    let str = ''
-    Object.keys(obj).forEach(key=>{
+function stringifyKV(obj: any) {
+    let str: string = ''
+    Object.keys(obj).forEach(key => {
         if (typeof obj[key] === 'object') {
             str += `${key}=${encodeURIComponent(JSON.stringify(obj[key]))}&`
         }
@@ -140,11 +170,11 @@ function stringifyKV(obj) {
     return str.slice(0, -1)
 }
 
-function getOrderList(payload, cb) {
+function getOrderList(payload: any, cb: any) {
     const request = require("request")
     console.log(payload)
-    payload.region_id = cookiesRawKV.find(c=>c.name==='region_id').value
-    payload.region_version = cookiesRawKV.find(c=>c.name==='region_version').value
+    payload.region_id = cookiesRawKV.find(c => c.name === 'region_id')?.value
+    payload.region_version = cookiesRawKV.find(c => c.name === 'region_version')?.value
     let header = {
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "zh-CN,zh;q=0.9",
@@ -165,22 +195,22 @@ function getOrderList(payload, cb) {
         method: 'get',
         headers: header,
         jar: request.jar()
-    }, function (error, response, body) {
+    }, function (error:any, response:any, body:any) {
         cb(JSON.parse(body))
     });
 }
 
-ipcMain.on('getOrderList', (event, arg) => {
-    getOrderList(arg, (body)=>{
+ipcMain.on('getOrderList', (event: IpcMainEvent, arg: any) => {
+    getOrderList(arg, (body:any) => {
         let _body = _.cloneDeep(body)
         if (!_body.data) {
             console.log("###", JSON.stringify(_body))
             event.reply("onOrderListSend", 'fuck')
             return
         }
-        let _wmOrderList = _.cloneDeep(_body.data.wmOrderList)
+        let _wmOrderList:any = _.cloneDeep(_body.data.wmOrderList)
         _body.data.wmOrderList = []
-        _wmOrderList.forEach(order=>{
+        _wmOrderList.forEach((order:any) => {
             let _order = _.cloneDeep(order)
             _order.commonInfo = JSON.parse(order.commonInfo)
             _order.orderInfo = JSON.parse(order.orderInfo)
@@ -192,23 +222,23 @@ ipcMain.on('getOrderList', (event, arg) => {
 
 let poiInfo = {}
 
-ipcMain.on('sendPoiInfo', (event, arg) => {
+ipcMain.on('sendPoiInfo', (event: IpcMainEvent, arg: any) => {
     poiInfo = arg
     console.log('sendPoiInfo', poiInfo)
 })
 
-ipcMain.on('getPoiInfo', async (event, arg) => {
+ipcMain.on('getPoiInfo', async (event: IpcMainEvent, arg: any) => {
     event.reply("onPoiInfoSend", poiInfo)
 })
 
-ipcMain.on('clearAllCookie', (event, arg) => {
+ipcMain.on('clearAllCookie', (event: IpcMainEvent, arg: any) => {
     session.defaultSession.clearStorageData({
         storages: [
             'indexdb'
         ]
     });
     session.defaultSession.cookies.get({})
-        .then((cookies) => {
+        .then((cookies: Cookie[]) => {
             cookies.forEach(cookie => {
                 let url = '';
                 // get prefix, like https://www.

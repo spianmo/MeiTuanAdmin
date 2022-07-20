@@ -3980,9 +3980,35 @@ registry-url@^5.0.0:
   dependencies:
     rc "^1.2.8"
 
-request@^2.88.0, request@^2.88.2:
+request@^2.88.0:
   version "2.88.2"
   resolved "https://mirrors.tencent.com/npm/request/-/request-2.88.2.tgz"
+  integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
+  dependencies:
+    aws-sign2 "~0.7.0"
+    aws4 "^1.8.0"
+    caseless "~0.12.0"
+    combined-stream "~1.0.6"
+    extend "~3.0.2"
+    forever-agent "~0.6.1"
+    form-data "~2.3.2"
+    har-validator "~5.1.3"
+    http-signature "~1.2.0"
+    is-typedarray "~1.0.0"
+    isstream "~0.1.2"
+    json-stringify-safe "~5.0.1"
+    mime-types "~2.1.19"
+    oauth-sign "~0.9.0"
+    performance-now "^2.1.0"
+    qs "~6.5.2"
+    safe-buffer "^5.1.2"
+    tough-cookie "~2.5.0"
+    tunnel-agent "^0.6.0"
+    uuid "^3.3.2"
+
+request@^2.88.2:
+  version "2.88.2"
+  resolved "https://mirrors.cloud.tencent.com/npm/request/-/request-2.88.2.tgz#d73c918731cb5a87da047e207234146f664d12b3"
   integrity sha512-MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==
   dependencies:
     aws-sign2 "~0.7.0"
@@ -4777,22 +4803,22 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-electron-renderer@^0.5.7:
-  version "0.5.7"
-  resolved "https://registry.npmmirror.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.5.7.tgz"
-  integrity sha512-Rd5SYh48U1Ov/VVxpXQ3br4oeyOUEYtrvwH3DT0P+MOvhLa140to3zZsMZy3flOUg/9SW1wf3eFVzQwexY+QAA==
+vite-plugin-electron-renderer@0.6.0:
+  version "0.6.0"
+  resolved "https://mirrors.cloud.tencent.com/npm/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.6.0.tgz#ca553676ca06f6520fea6f9166c894a63869a677"
+  integrity sha512-4jQCrrPBzy8krQqOPIzqHVor3AxzBxfaDMbM0FimmFx/LLRQrgUg3gqFzKw8GqoXhftgY2gCfUlE0/SkyqthbQ==
 
-vite-plugin-electron@^0.7.5:
-  version "0.7.5"
-  resolved "https://registry.npmmirror.com/vite-plugin-electron/-/vite-plugin-electron-0.7.5.tgz"
-  integrity sha512-A1MFutQDy59d2e916jKL+IUxs3gE3LgOuCdUPjwSvI6TT2gdRvFhS6pwBb5tRC0YW0tRGnPTW87b0hnDgYr3kw==
+vite-plugin-electron@^0.8.0:
+  version "0.8.0"
+  resolved "https://mirrors.cloud.tencent.com/npm/vite-plugin-electron/-/vite-plugin-electron-0.8.0.tgz#9135bdd4bcfca29b1329f2bcf7f85b991a4eb620"
+  integrity sha512-0iVUJc/1OAKNolqqDqEflTy771DaAP8K1DbjCJx4d/BVYHhjd4q5/xYQE0BWr9x9F24i82FS84DzczezPmLS/Q==
   dependencies:
-    vite-plugin-electron-renderer "^0.5.7"
+    vite-plugin-electron-renderer "0.6.0"
 
-vite-plugin-esmodule@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.npmmirror.com/vite-plugin-esmodule/-/vite-plugin-esmodule-1.3.2.tgz"
-  integrity sha512-Q4g6mEWJBEcK3FR+8n5Q4UBCkF5ZBb5q2gGZVokVIipjIgCLwIZ+jAyKywQFxPTRPwni8bhqlCC9Y9IWoeX0nA==
+vite-plugin-esmodule@^1.4.1:
+  version "1.4.1"
+  resolved "https://mirrors.cloud.tencent.com/npm/vite-plugin-esmodule/-/vite-plugin-esmodule-1.4.1.tgz#52058dba92915374b6aae631aab52e709e98852e"
+  integrity sha512-CLGW8tWLQ6Z52CyhSsCySR54+TVxfMRHTIRxY81mT8RFj9r7H6oXI3TFb9MzoJu/esfzQI3GOIOyhgLZpHCqlg==
   dependencies:
     vite-plugin-optimizer "^1.3.4"
     webpack "^5.73.0"

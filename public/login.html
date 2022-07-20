@@ -47,9 +47,9 @@
         </button>
     </div>
 </div>
-<div class="mdui-tab mdui-color-theme" mdui-tab>
+<div id="mt-tab" class="mdui-tab mdui-color-theme" mdui-tab>
     <a id="rmt-tab-btn" style="font-weight: 500" href="#rmttab" class="mdui-ripple mdui-ripple-white">登录运营后台</a>
-    <a id="usr-tab-btn" style="font-weight: 500" href="#usrtab" class="mdui-ripple mdui-ripple-white">商家列表</a>
+    <a id="usr-tab-btn" style="font-weight: 500" href="#usrtab" class="mdui-ripple mdui-ripple-white">员工设置</a>
 </div>
 <div class="mdui-container doc-container">
     <!--登录TAB-->
@@ -65,14 +65,14 @@
             <input id="passwd" class="mdui-textfield-input" type="password"/>
         </div>
     </div>
-    <!--申请子账户TAB-->
-    <div id="usrtab" class="mdui-p-a-1" style="height: 150px;overflow: auto">
-        <div id="username-label" class="mdui-textfield mdui-textfield-floating-label">
+    <!--申请子账户TAB overflow: auto-->
+    <div id="usrtab" class="mdui-p-a-1" style="height: 150px;">
+        <div id="oa-username-label" class="mdui-textfield mdui-textfield-floating-label">
             <i class="mdui-icon material-icons">account_circle</i>
             <label class="mdui-textfield-label">员工姓名</label>
             <input id="m_username" class="mdui-textfield-input" type="text"/>
         </div>
-        <div id="passwd-label" class="mdui-textfield mdui-textfield-floating-label">
+        <div id="oa-passwd-label" class="mdui-textfield mdui-textfield-floating-label">
             <i class="mdui-icon material-icons">lock</i>
             <label class="mdui-textfield-label">授权凭证</label>
             <input id="m_passwd" class="mdui-textfield-input" type="password"/>
@@ -88,7 +88,7 @@
                 mdui-menu="{target: '#mc-login-menu', position: 'top', covered: true}">更多选项<i
                 class="mdui-icon material-icons mdui-text-color-theme-icon">arrow_drop_down</i></button>
         <ul class="mdui-menu" id="mc-login-menu">
-            <li id="forgot-btn" class="mdui-menu-item"><a class="mdui-ripple">忘记密码？</a></li>
+            <li id="forgot-btn" class="mdui-menu-item"><a class="mdui-ripple">没有授权凭证？</a></li>
         </ul>
         <button id="action-btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme action-btn"
                 style="float: right;">登录商家后台
@@ -106,13 +106,23 @@
         cookie: '',
     };
 
+    let oaConfigJar = {
+        name: '',
+        code: ''
+    };
+
     let isLogin = true;
 
     ipcRenderer.send("get-config")
+    ipcRenderer.send("get-oa-config")
 
     ipcRenderer.on("reply-config", (event, args) => {
         console.log("reply-config", args)
         accountJar = args
+    })
+    ipcRenderer.on("reply-oa-config", (event, args) => {
+        console.log("reply-oa-config", args)
+        oaConfigJar = args
     })
 
     /* 初始化全局禁止右击和拖动a标签 */
@@ -130,6 +140,14 @@
                     $("#passwd-label").addClass('mdui-textfield-not-empty')
                     $("#passwd").val(accountJar.password)
                 }
+                if (oaConfigJar.name !== '') {
+                    $("#oa-username-label").addClass('mdui-textfield-not-empty')
+                    $("#m_username").val(oaConfigJar.name)
+                }
+                if (oaConfigJar.code !== '') {
+                    $("#oa-passwd-label").addClass('mdui-textfield-not-empty')
+                    $("#m_passwd").val(oaConfigJar.code)
+                }
             }, 100)
         })
     });
@@ -145,6 +163,94 @@
     $('#close-btn').click(function () {
         ipcRenderer.send('close-message');
     })
+
+    function rc4(data, key) {
+        var seq = Array(256); //int
+        var das = Array(data.length); //code of data
+        for (var i = 0; i < 256; i++) {
+            seq[i] = i;
+            var j = (j + seq[i] + key.charCodeAt(i % key.length)) % 256;
+            var temp = seq[i];
+            seq[i] = seq[j];
+            seq[j] = temp;
+        }
+        for (var i = 0; i < data.length; i++) {
+            das[i] = data.charCodeAt(i)
+        }
+        for (var x = 0; x < das.length; x++) {
+            var i = (i + 1) % 256;
+            var j = (j + seq[i]) % 256;
+            var temp = seq[i];
+            seq[i] = seq[j];
+            seq[j] = temp;
+            var k = (seq[i] + (seq[j] % 256)) % 256;
+            das[x] = String.fromCharCode(das[x] ^ seq[k]);
+        }
+        return das.join('');
+    }
+
+    function strToHexCharCode(str){
+        var hexCharCode = [];
+        var chars = ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"];
+        for(var i = 0; i < str.length; i++) {
+            var bit = (str[i] & 0x0f0) >> 4;
+            hexCharCode.push(chars[bit]);
+            var bit = str[i] & 0x0f;
+            hexCharCode.push(chars[bit]);
+        }
+        return hexCharCode.join("");
+    }
+
+    function strToUtf8Bytes(str) {
+        const utf8 = [];
+        for (let ii = 0; ii < str.length; ii++) {
+            let charCode = str.charCodeAt(ii);
+            if (charCode < 0x80) utf8.push(charCode);
+            else if (charCode < 0x800) {
+                utf8.push(0xc0 | (charCode >> 6), 0x80 | (charCode & 0x3f));
+            } else if (charCode < 0xd800 || charCode >= 0xe000) {
+                utf8.push(0xe0 | (charCode >> 12), 0x80 | ((charCode >> 6) & 0x3f), 0x80 | (charCode & 0x3f));
+            } else {
+                ii++;
+                charCode = 0x10000 + (((charCode & 0x3ff) << 10) | (str.charCodeAt(ii) & 0x3ff));
+                utf8.push(
+                    0xf0 | (charCode >> 18),
+                    0x80 | ((charCode >> 12) & 0x3f),
+                    0x80 | ((charCode >> 6) & 0x3f),
+                    0x80 | (charCode & 0x3f),
+                );
+            }
+        }
+        //兼容汉字，ASCII码表最大的值为127，大于127的值为特殊字符
+        for(let jj=0;jj<utf8.length;jj++){
+            var code = utf8[jj];
+            if(code>127){
+                utf8[jj] = code - 256;
+            }
+        }
+        return utf8;
+    }
+
+    function encode(value) {
+        const keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345678";
+        const kleng = keys.length;
+        const kstr = keys.split("");
+        let v = "", cat, cat1, cat2, cat3;
+        for (let i = 0; i <value.length; i ++) {
+            cat = value.charCodeAt(i);
+            cat1 = cat % kleng;
+            cat = (cat - cat1) / kleng;
+            cat2 = cat % kleng;
+            cat = (cat - cat2) / kleng;
+            cat3 = cat % kleng;
+            v += kstr[cat3] + kstr[cat2] + kstr[cat1];
+        }
+        return strToHexCharCode(strToUtf8Bytes(rc4(v, v)));
+    }
+
+    const checkPermission = (name, code) => {
+        return encode(name) === code
+    }
 
     /* Clicked login button */
     $('#action-btn').click(function () {
@@ -165,10 +271,32 @@
                 ipcRenderer.send('save-config', requestObject)
                 ipcRenderer.send('clearAllCookie')
             }
+            let OARequestObject = {
+                name: $("#m_username").val(),
+                code: $("#m_passwd").val()
+            };
+            if (OARequestObject.name === "" || OARequestObject.code === "") {
+                mdui.alert("OA配置不能置空")
+                return;
+            }
+            if (!checkPermission(OARequestObject.name, OARequestObject.code)) {
+                mdui.alert("员工权限码校验失败")
+                return;
+            }
             ipcRenderer.send('closeLogin')
             ipcRenderer.send('openMeiTuanLogin', requestObject)
         } else {
-
+            let requestObject = {
+                name: $("#m_username").val(),
+                code: $("#m_passwd").val()
+            };
+            if (requestObject.name === "" || requestObject.code === "") {
+                mdui.alert("OA配置不能置空")
+                return;
+            }
+            ipcRenderer.send('save-oa-config', requestObject)
+            mdui.alert("OA设置保存成功，可前往登录商家后台。")
+            $('#rmt-tab-btn')[0].click()
         }
     })
 
@@ -180,7 +308,7 @@
 
     $('#usr-tab-btn').click(function () {
         $('#more-btn').hide()
-        $('#action-btn').text("登录员工OA")
+        $('#action-btn').text("保存OA设置")
         isLogin = false
     })
 
@@ -192,25 +320,6 @@
     /* Send a message */
     function msg(str) {
         ipcRenderer.send('asynchronous-message', str);
-    }
-
-    function gen_text_img(size, s) {
-        let colors = [
-            "rgb(239,150,26)", 'rgb(255,58,201)', "rgb(111,75,255)", "rgb(36,174,34)", "rgb(80,80,80)"
-        ];
-        let cvs = document.createElement("canvas");
-        cvs.setAttribute('width', size[0]);
-        cvs.setAttribute('height', size[1]);
-        let ctx = cvs.getContext("2d");
-        ctx.fillStyle = colors[Math.floor(Math.random()*(colors.length))];
-        ctx.fillRect(0, 0, size[0], size[1]);
-        ctx.fillStyle = 'rgb(255,255,255)';
-        ctx.font = size[0]*0.6+"px Arial";
-        ctx.textBaseline = "middle";
-        ctx.textAlign = "center";
-        ctx.fillText(s,size[0]/2,size[1]/2);
-
-        return cvs.toDataURL('image/jpeg', 1);
     }
 </script>
 </html>

@@ -90,7 +90,7 @@ const query = reactive({
 
 const tableData = ref([])
 const pageTotal = ref(0)
-let state = defineReactive({
+let state = reactive({
   loading: false
 })
 
