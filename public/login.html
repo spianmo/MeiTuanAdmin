@@ -55,76 +55,28 @@
     <!--登录TAB-->
     <div id="rmttab" class="mdui-p-a-1" style="height: 150px">
         <div id="username-label" class="mdui-textfield mdui-textfield-floating-label">
-            <i class="mdui-icon material-icons">account_circle</i>
-            <label class="mdui-textfield-label">账户名称</label>
+            <i class="mdui-icon material-icons">domain</i>
+            <label class="mdui-textfield-label">商家账号</label>
             <input id="username" class="mdui-textfield-input" type="text"/>
         </div>
         <div id="passwd-label" class="mdui-textfield mdui-textfield-floating-label">
             <i class="mdui-icon material-icons">lock</i>
-            <label class="mdui-textfield-label">密码凭证</label>
+            <label class="mdui-textfield-label">商家密码</label>
             <input id="passwd" class="mdui-textfield-input" type="password"/>
         </div>
     </div>
     <!--申请子账户TAB-->
     <div id="usrtab" class="mdui-p-a-1" style="height: 150px;overflow: auto">
-        <div class="mdui-list mdui-list-dense">
-
-
-                <label class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-avatar">
-                        <img :src="gen_text_img(64, '夜')"/>
-                    </div>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">老潼关肉夹馍</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">
-                            <span class="mdui-text-color-theme-text">
-                                shiaadhkhak,3213123131
-                            </span>
-                        </div>
-                    </div>
-                    <label class="mdui-radio">
-                        <input type="radio" name="group1" checked/>
-                        <i class="mdui-radio-icon"></i>
-                    </label>
-                </label>
-            <li class="mdui-divider"></li>
-                <label class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-avatar">
-                        <img :src="gen_text_img(64, '夜')"/>
-                    </div>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">沙县小吃</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">
-                            <span class="mdui-text-color-theme-text">
-                                shiaadhkhak,3213123131
-                            </span>
-                        </div>
-                    </div>
-                    <label class="mdui-radio">
-                        <input type="radio" name="group1"/>
-                        <i class="mdui-radio-icon"></i>
-                    </label>
-                </label>
-            <li class="mdui-divider"></li>
-                <label class="mdui-list-item mdui-ripple">
-                    <div class="mdui-list-item-avatar">
-                        <img :src="gen_text_img(64, '夜')"/>
-                    </div>
-                    <div class="mdui-list-item-content">
-                        <div class="mdui-list-item-title">夜叉烧烤场</div>
-                        <div class="mdui-list-item-text mdui-list-item-one-line">
-                            <span class="mdui-text-color-theme-text">
-                                shiaadhkhak,3213123131
-                            </span>
-                        </div>
-                    </div>
-                    <label class="mdui-radio">
-                        <input type="radio" name="group1"/>
-                        <i class="mdui-radio-icon"></i>
-                    </label>
-                </label>
-
-            </div>
+        <div id="username-label" class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">account_circle</i>
+            <label class="mdui-textfield-label">员工姓名</label>
+            <input id="m_username" class="mdui-textfield-input" type="text"/>
+        </div>
+        <div id="passwd-label" class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">lock</i>
+            <label class="mdui-textfield-label">授权凭证</label>
+            <input id="m_passwd" class="mdui-textfield-input" type="password"/>
+        </div>
     </div>
     <!--分隔线-->
     <br/>
@@ -196,13 +148,14 @@
 
     /* Clicked login button */
     $('#action-btn').click(function () {
-        let requestObject = {};
         let errFunc = function (xhr) {
             mdui.alert("请求失败：" + xhr.status + " " + xhr.statusText)
         }
         if (isLogin) {
-            requestObject.username = $("#username").val()
-            requestObject.password = $("#passwd").val()
+            let requestObject = {
+                username: $("#username").val(),
+                password: $("#passwd").val()
+            };
             if (requestObject.username === "" || requestObject.password === "") {
                 mdui.alert("账号密码不能置空")
                 return;
@@ -227,7 +180,7 @@
 
     $('#usr-tab-btn').click(function () {
         $('#more-btn').hide()
-        $('#action-btn').text("登录选中商家")
+        $('#action-btn').text("登录员工OA")
         isLogin = false
     })
 
