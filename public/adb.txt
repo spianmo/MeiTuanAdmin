@@ -1,0 +1,47 @@
+1.  adb devices		查看设备序列号
+2.  adb install <packagename>
+3.  adb kill-server
+4.  adb logcat >d:/log.txt
+5.  adb logcat | find “com.android.settings” >d:/log.txt
+6.  adb logcat | findstr -i “cmp” >d:/log.txt
+7.  adb logcat | findstr -i ActivityManager >d:/log.txt
+8.  adb logcat thread >d:/log.txt
+9.  adb push d:/test.sh /data/local/tmp
+10. adb reboot
+11. adb remount
+12. adb shell
+13. adb shell am start –a android.intent.action.CALL –dtel:10086		拨打电话
+14. adb shell am start –n com.android.settings/.Settings		启动activity
+15. adb shell am force-stop com.android.settings		强制停止应用
+16. adb shell cat /sys/class/leds/lcd-backlight/brightness		获取屏幕亮度
+17. adb shell cat /sys/class/net/wlan0/address		获取手机mac地址
+18. adb shell cat /sys/class/power_supply/battery/capacity		获取电池电量
+19. adb shell dumpsys telephony.registry | find “mCallState” 		获取通话状态(Windows)
+    a)	mCallState=0	未通话
+    b)	mCallState=1	mCallIncomingNumber=+861772259XXXX	响铃状态
+    c)	mCallState=2	通话中
+20. adb shell getprop ro.build.version.release		获取android版本
+21. adb shell getprop ro.product.model		获取设备型号
+22. adb shell pm clear com.android.settings		清除应用数据和缓存
+23. adb shell pm list packages		查看所有包名
+24. adb shell pm list packages | find “camera”		查找包含camera的包名(windows系统)
+25. adb shell pm list packages | grep camera		linux系统使用
+26. adb shell pm list packages | findstr “camera”		查找包含camera的包名
+27. adb shell input keyevent 3		按Home键
+28. adb shell input keyevent 4		按back键
+29. adb shell input keyevent 6		挂断电话
+30. adb shell input keyevent 26		按power键
+31. adb shell input keyevent 82		无密码时可解锁屏幕
+32. adb shell input swipe 50 200 50 400 500		前4个坐标，第5个时间ms
+33. adb shell input tap 50 250		点击50 250
+34. adb shell input text abc		输入abc
+35. adb shell wm size		获取屏幕分辨率
+36. adb version
+37. adb shell am start -W com.oecommunity.oeshop/.component.main.activity.MainActivity      获取apk启动时间
+38. adb shell dumpsys cpuinfo       查看CPU使用率
+39. adb shell dumpsys meminfo       查看内存使用状态
+40. adb shell cat /proc/pid/net/dev |find "wlan0"   根据pid获取设备的wifi流量
+41. adb shell cat /proc/pid/net/dev |find "rmnet0"  根据pid获取设备的数据流量
+42. adb shell cat /proc/net/xt_qtaguid/stats | find "uid"   根据uid获取app的流量，第6列数据是接收流量，第8列数据是发送流量
+43. adb shell dumpsys package com.android.settings | find "codePath=/system"    判断一个app是否是系统应用
+44. adb shell dumpsys package com.android.settings | find "userId"  查找一个app的userId

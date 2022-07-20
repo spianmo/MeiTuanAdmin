@@ -7,9 +7,12 @@
     </div>
     <div class='logo'>{{ state.currentLabel }}</div>
     <div style="height: 100%;width: 100%;display: flex;justify-content: flex-end;align-items: center">
-      <el-select style="margin-right: 30px" v-model="state.device" value-key="value" placeholder="请选择连接的设备" @change="onDevicesChange">
+      <el-select style="width: 180px" class="m-r-20" width="100px" v-model="state.device" value-key="value" placeholder="请选择连接的设备"
+                 @change="onDevicesChange">
         <template #prefix>
-          <el-icon class="el-input__icon"><Iphone /></el-icon>
+          <el-icon class="el-input__icon">
+            <Iphone/>
+          </el-icon>
           <div v-if="Object.keys(state.device).length!==0" class="m-l-5" :style="{
           'border-radius': '6px',
           'background-color': state.device.type==='offline' ? '#fd563c' : '#09f175',
@@ -26,10 +29,15 @@
             <el-tag v-if="item.type==='device'">设备</el-tag>
             <el-tag v-if="item.type==='emulator'" type="success">模拟器</el-tag>
             <el-tag v-if="item.type==='offline'" type="danger">离线</el-tag>
-            {{item.label}}
+            {{ item.label }}
           </template>
         </el-option>
       </el-select>
+      <el-tooltip content="当前设备通话状态">
+        <el-button style="cursor: default" type="primary" text bg>{{ state.callState }}
+        </el-button>
+      </el-tooltip>
+      <el-button class="m-r-20" type="danger" @click="hangUp" text bg>挂断电话</el-button>
     </div>
   </div>
 </template>
@@ -38,38 +46,21 @@ import {computed, onMounted} from 'vue'
 import {useStore} from 'vuex'
 import {onBeforeRouteUpdate} from "vue-router";
 import {ipcRenderer} from "electron";
-import schedule from 'node-schedule'
-import adbkit from 'adbkit'
-import currentDevice from "../../utils/device";
+import currentDevice, {checkConnectionTask, getCallState, hangUpCall} from "../../utils/device";
+import {ElNotification} from "element-plus";
 
 const store = useStore()
 const state = defineReactive({
   currentLabel: '美团外卖订单',
   options: [],
-  device: {}
+  device: {},
+  callState: '通话未知',
 })
 
 const collapse = computed(() => store.state.collapse)
 // 侧边栏折叠
 const collapseChange = () => {
   store.commit('handleCollapse', !collapse.value)
-}
-
-const client = adbkit.createClient()
-
-const checkConnectionTask = (callback) => {
-  let rule = new schedule.RecurrenceRule();
-  let times = [];
-  for (let i = 1; i < 60; i++) {
-    times.push(i);
-  }
-  rule.second = times;
-  schedule.scheduleJob(rule, async () => {
-    let result = await client.listDevices();
-    if (result !== null && result !== undefined) {
-      callback(result);
-    }
-  });
 }
 
 const discoverDevice = () => {
@@ -96,7 +87,6 @@ const discoverDevice = () => {
 }
 
 const onDevicesChange = (device) => {
-  console.log('device', device)
   currentDevice.deviceId = device.value
   currentDevice.type = device.type
 }
@@ -106,8 +96,39 @@ ipcRenderer.on("onPoiInfoSend", async (event, args) => {
   state.currentLabel = args.name
 })
 
+const hangUp = async () => {
+  if (!currentDevice.type) {
+    ElNotification({
+      title: '设备未连接',
+      message: '请先连接设备！',
+      type: 'error',
+      position: 'bottom-right',
+    })
+    return
+  }
+  if (currentDevice.type === 'offline') {
+    ElNotification({
+      title: '挂断失败',
+      message: '设备已离线！',
+      type: 'error',
+      position: 'bottom-right',
+    })
+    return
+  }
+  await hangUpCall()
+  ElNotification({
+    title: '已挂断',
+    message: '已发送挂断指令！',
+    type: 'success',
+    position: 'bottom-right',
+  })
+}
+
 onMounted(() => {
   discoverDevice()
+  setTimeout(async () => {
+    state.callState = await getCallState()
+  }, 1000)
   ipcRenderer.send("getPoiInfo")
   if (document.body.clientWidth < 1500) {
     collapseChange()

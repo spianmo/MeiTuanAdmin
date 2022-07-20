@@ -42,7 +42,9 @@
       <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone' show-overflow-tooltip></el-table-column>
       <el-table-column align='center' label='备用号码' prop='info.orderInfo.recipient_bindedPhone'>
         <template #default='scope'>
-          {{ scope.row.info.orderInfo.recipient_bindedPhone ? scope.row.info.orderInfo.recipient_bindedPhone.replace('手机尾号', '') : '无' }}
+          {{
+            scope.row.info.orderInfo.recipient_bindedPhone ? scope.row.info.orderInfo.recipient_bindedPhone.replace('手机尾号', '') : '无'
+          }}
         </template>
       </el-table-column>
       <el-table-column align='center' label='手机尾号' prop='info.orderInfo.recipient_phone'>
@@ -52,14 +54,15 @@
       </el-table-column>
       <el-table-column sortable align='center' label='状态'>
         <template #default='scope'>
-          <el-tag @click="updateOrderStatus(scope.row)" :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
+          <el-tag @click="updateOrderStatus(scope.row)"
+                  :type="scope.row.status === '已回访' ? 'success': scope.row.status === '未接听'? 'danger': ''">
             {{ scope.row.status }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" align='center' label='操作' width='120'>
         <template #default='scope'>
-          <el-link text='一键拨号' type='primary' @click='callPhone(scope.$index, scope.row)'>一键拨号</el-link>
+          <el-link text='一键拨号' type='primary' @click='callPhoneNumber(scope.$index, scope.row)'>一键拨号</el-link>
         </template>
       </el-table-column>
     </el-table>
@@ -73,9 +76,10 @@
 
 <script setup>
 import {onMounted, reactive, ref} from 'vue'
-import {ipcRenderer} from "electron";
+import {ipcRenderer, shell} from "electron";
 import {db} from "../plugins/database";
 import {ElNotification} from "element-plus";
+import device, {adbShell, callPhone, client, Uint8ArrayToString} from "../utils/device";
 
 const query = reactive({
   time: [new Date(new Date().setHours(0, 0, 0, 0)),
@@ -176,7 +180,7 @@ const updateOrderStatus = async (order) => {
 
 const updateOrder = async (order) => {
   return await db.collection('orders')
-      .update({ key: order.key }, {status: order.status})
+      .update({key: order.key}, {status: order.status})
 }
 
 const insertOrder = async (orderId, order) => {
@@ -275,8 +279,29 @@ const pageQueryOrders = async () => {
       .limit(query.size).toArray()
 }
 
-const callPhone = (index, row) => {
-
+const callPhoneNumber = async (index, row) => {
+  if (!device.type) {
+    ElNotification({
+      title: '拨打失败',
+      message: '拨号设备未连接！',
+      type: 'error',
+      position: 'bottom-right',
+    })
+    return
+  }
+  if (device.type === 'offline') {
+    ElNotification({
+      title: '拨打失败',
+      message: '拨号设备已离线！',
+      type: 'error',
+      position: 'bottom-right',
+    })
+    return
+  }
+  let phone = row.info.orderInfo.privacy_phone
+  await callPhone(phone)
+  row.status = "已回访"
+  await updateOrder(row)
 }
 
 </script>
