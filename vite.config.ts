@@ -19,6 +19,8 @@ export default defineConfig({
             'node-fetch',
             'file-type',
             'move-file',
+            'node-schedule',
+            'adbkit'
         ]),
         electron({
             main: {

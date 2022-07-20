@@ -6,6 +6,7 @@ import installElementPlus from './plugins/element'
 import {initDb} from './plugins/database'
 import './assets/css/icon.css'
 import './assets/css/base.css'
+import './assets/index.scss' //自定义主题，样式
 import './esmodules'
 import './samples/node-api'
 
