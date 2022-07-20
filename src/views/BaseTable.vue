@@ -22,7 +22,7 @@
       </div>
     </div>
     <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
-              height="350px" size="small"
+              height="470px" size="small"
               header-cell-class-name='table-header'>
       <el-table-column fixed sortable align="center" label='序号' prop='info.orderInfo.num'>
         <template #default='scope'>
@@ -50,6 +50,17 @@
       <el-table-column align='center' label='手机尾号' prop='info.orderInfo.recipient_phone'>
         <template #default='scope'>
           {{ scope.row.info.orderInfo.recipient_phone.replace('手机尾号', '') }}
+        </template>
+      </el-table-column>
+      <el-table-column width="200" align='center' label='回访备注' prop='info.remark'>
+        <template #default='scope'>
+          <el-input
+              v-model="scope.row.remark"
+              :rows="2"
+              @change="updateRemark(scope.row)"
+              type="textarea"
+              placeholder="回访备注"
+          />
         </template>
       </el-table-column>
       <el-table-column sortable align='center' label='状态'>
@@ -85,7 +96,7 @@ const query = reactive({
   time: [new Date(new Date().setHours(0, 0, 0, 0)),
     new Date(new Date().setHours(0, 0, 0, 0))],
   page: 1,
-  size: 9
+  size: 7
 })
 
 const tableData = ref([])
@@ -183,12 +194,19 @@ const updateOrder = async (order) => {
       .update({key: order.key}, {status: order.status})
 }
 
+const updateRemark = async (order) => {
+  console.log(order)
+  return await db.collection('orders')
+      .update({key: order.key}, {remark: order.remark})
+}
+
 const insertOrder = async (orderId, order) => {
   await db.collection('orders')
       .insert({
         key: orderId,
         info: order,
         status: '未回访',
+        remark: '',
         orderTime: order.commonInfo.order_time
       })
       .catch(e => {
@@ -218,9 +236,9 @@ ipcRenderer.on("onOrderListSend", async (event, args) => {
   for (const order of args.data.wmOrderList) {
     await insertOrder(order.orderInfo.wm_order_id_view_str, order)
   }
+  await getData()
   if (args.data.nextLabel) {
     setTimeout(() => {
-      getData()
       fetchOrderData()
     }, randomTime() + 1000)
   }

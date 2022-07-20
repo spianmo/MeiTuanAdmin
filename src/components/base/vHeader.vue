@@ -93,7 +93,7 @@ const onDevicesChange = (device) => {
 
 ipcRenderer.on("onPoiInfoSend", async (event, args) => {
   console.log("onPoiInfoSend", args)
-  state.currentLabel = args.name
+  state.currentLabel = args.name ?? '美团外卖订单'
 })
 
 const hangUp = async () => {

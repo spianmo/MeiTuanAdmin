@@ -29,7 +29,7 @@
 
     const webview = document.getElementById('loginWrapper')
     webview.addEventListener('dom-ready', () => {
-        //webview.openDevTools();
+        // webview.openDevTools();
         webview.send('sendAccount', accountObject)
     });
     webview.addEventListener('ipc-message', async (res) => {

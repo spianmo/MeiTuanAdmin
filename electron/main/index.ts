@@ -1,10 +1,11 @@
-import {app, BrowserWindow, dialog, ipcMain, Menu} from 'electron'
+import {app, BrowserWindow, dialog, ipcMain, Menu, session} from 'electron'
 import {release} from 'os'
 import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
 import {log} from "electron-log";
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+import Cookie = Electron.Cookie;
 
 
 // Disable GPU Acceleration for Windows 7
@@ -58,8 +59,8 @@ function _createLoginWindow() {
 function _createMainWindow() {
     mainWindow = new BrowserWindow({
         title: '美团商家回访工具',
-        width: 1000,
-        height: 600,
+        width: 1200,
+        height: 710,
         minHeight: 480,
         minWidth: 800,
         resizable: false,
@@ -73,9 +74,9 @@ function _createMainWindow() {
 
     if (app.isPackaged) {
         mainWindow.loadFile(appConf.indexHtml)
-        mainWindow.webContents.openDevTools({
-            mode: "detach"
-        })
+        // mainWindow.webContents.openDevTools({
+        //     mode: "detach"
+        // })
     } else {
         mainWindow.loadURL(appConf.url)
         mainWindow.webContents.openDevTools({
