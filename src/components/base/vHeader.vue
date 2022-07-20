@@ -7,7 +7,7 @@
     </div>
     <div class='logo'>{{ state.currentLabel }}</div>
     <div style="height: 100%;width: 100%;display: flex;justify-content: flex-end;align-items: center">
-      <el-select style="width: 180px" class="m-r-20" width="100px" v-model="state.device" value-key="value" placeholder="请选择连接的设备"
+      <el-select style="width: 220px" class="m-r-20" v-model="state.device" value-key="value" placeholder="请选择连接的设备"
                  @change="onDevicesChange">
         <template #prefix>
           <el-icon class="el-input__icon">

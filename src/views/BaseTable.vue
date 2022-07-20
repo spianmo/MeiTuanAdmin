@@ -77,10 +77,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class='pagination'>
+    <div class='pagination flex justify-between align-items'>
       <el-pagination :current-page='query.page' :page-size='query.size' :total='pageTotal'
                      background layout='total, prev, pager, next'
                      @current-change='handlePageChange'></el-pagination>
+      <div>
+        总回访数量: {{ state.totalBackOrder }} 成功回访数量: {{ state.successBackOrder }}
+      </div>
     </div>
   </div>
 </template>
@@ -102,7 +105,9 @@ const query = reactive({
 const tableData = ref([])
 const pageTotal = ref(0)
 let state = reactive({
-  loading: false
+  loading: false,
+  totalBackOrder: 0,
+  successBackOrder: 0
 })
 
 // 获取表格数据
@@ -110,8 +115,9 @@ const getData = async () => {
   state.loading = true
   await pageOrderCount(query).then(count => {
     pageTotal.value = count
-    pageQueryOrders(query).then(data => {
+    pageQueryOrders(query).then(async data => {
       tableData.value = data
+      await getOrderSumNum()
       setTimeout(() => {
         state.loading = false
       }, 200)
@@ -273,6 +279,16 @@ function pageOrderCount(query) {
       .where('orderTime')
       .between(orderTime.startDate, orderTime.endDate)
       .count()
+}
+
+const getOrderSumNum = async () => {
+  let faildBackOrder = await db.collection('orders')
+      .find({status: '未接听'})
+      .count()
+  state.successBackOrder = await db.collection('orders')
+      .find({status: '已回访'})
+      .count()
+  state.totalBackOrder = state.successBackOrder + faildBackOrder
 }
 
 const pageQueryOrders = async () => {
