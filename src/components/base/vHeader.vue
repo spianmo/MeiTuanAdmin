@@ -7,7 +7,7 @@
     </div>
     <div class='logo'>{{ state.currentLabel }}</div>
     <div style="height: 100%;width: 100%;display: flex;justify-content: flex-end;align-items: center">
-      <el-select style="margin-right: 30px" v-model="state.value" :value-key="state.value" placeholder="请选择连接的设备" @change="onDevicesChange">
+      <el-select style="margin-right: 30px" v-model="state.device" value-key="value" placeholder="请选择连接的设备" @change="onDevicesChange">
         <template #prefix>
           <el-icon class="el-input__icon"><Iphone /></el-icon>
           <div v-if="Object.keys(state.device).length!==0" class="m-l-5" :style="{
@@ -85,6 +85,8 @@ const discoverDevice = () => {
 
     if (list.length === 0) {
       state.device = {};
+      currentDevice.deviceId = ''
+      currentDevice.type = ''
     } else {
       state.device = list[0];
       onDevicesChange(list[0])
@@ -93,9 +95,10 @@ const discoverDevice = () => {
   })
 }
 
-const onDevicesChange = (value) => {
-  console.log('device', value)
-  currentDevice.deviceId = value
+const onDevicesChange = (device) => {
+  console.log('device', device)
+  currentDevice.deviceId = device.value
+  currentDevice.type = device.type
 }
 
 ipcRenderer.on("onPoiInfoSend", async (event, args) => {
