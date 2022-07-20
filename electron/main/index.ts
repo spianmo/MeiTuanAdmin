@@ -4,6 +4,8 @@ import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
 import {log} from "electron-log";
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
+
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -89,6 +91,9 @@ function _createMainWindow() {
 app.on('ready', async () => {
     setTray();
     await _createLoginWindow();
+    installExtension(VUEJS_DEVTOOLS.id)
+        .then((name) => console.log(`Added Extension:  ${name}`))
+        .catch((err) => console.log('An error occurred: ', err));
 });
 
 app.on('window-all-closed', () => {
