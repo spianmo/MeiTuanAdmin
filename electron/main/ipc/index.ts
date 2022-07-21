@@ -14,10 +14,12 @@ import './sqlite3'
 import axios from "axios";
 import {oaInfo} from "./local";
 import {poiInfo} from "./local"
+import {clearAllData} from "./local";
 
 export {
     oaInfo,
-    poiInfo
+    poiInfo,
+    clearAllData
 }
 
 ipcMain.on('close-message', (event, arg) => {

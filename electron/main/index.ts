@@ -1,10 +1,12 @@
-import {app, BrowserWindow, Menu} from 'electron'
+import {app, BrowserWindow, Menu, session} from 'electron'
 import {release} from 'os'
 import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
 import {oaInfo, poiInfo} from "./ipc/index";
+import Cookie = Electron.Cookie;
+import {clearAllData} from "./ipc/index";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -88,6 +90,7 @@ function _createMainWindow() {
 }
 
 app.on('ready', async () => {
+    clearAllData()
     setTray();
     await _createLoginWindow();
     installExtension(VUEJS_DEVTOOLS.id)

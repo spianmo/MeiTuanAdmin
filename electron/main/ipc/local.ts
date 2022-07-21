@@ -123,7 +123,7 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
         },
     })
     mtLoginWindow.loadFile(appConf.meituanHtml)
-    //mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     mtLoginWindow?.on('ready-to-show', function () {
         mtLoginWindow?.webContents?.send('receiveCookie', arg);
         mtLoginWindow?.show()
@@ -246,7 +246,7 @@ ipcMain.on('getPoiInfo', async (event: IpcMainEvent, arg: any) => {
     event.reply("onPoiInfoSend", bundle)
 })
 
-ipcMain.on('clearAllCookie', (event: IpcMainEvent, arg: any) => {
+export const clearAllData = () => {
     session.defaultSession.clearStorageData({
         storages: [
             'indexdb'
@@ -268,6 +268,10 @@ ipcMain.on('clearAllCookie', (event: IpcMainEvent, arg: any) => {
         }).catch((error) => {
         console.log(error)
     })
+}
+
+ipcMain.on('clearAllCookie', (event: IpcMainEvent, arg: any) => {
+    clearAllData()
 })
 
 

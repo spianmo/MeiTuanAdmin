@@ -50,9 +50,10 @@
         console.log("!! ", res.url)
         if (res.url.indexOf('https://e.waimai.meituan.com/?time=') !== -1) {
             ipcRenderer.send('getCookieBySession');
-        } else if (res.url.indexOf('https://e.waimai.meituan.com/new_fe/login#/login/continue?BSID=') !== -1){
-            ipcRenderer.send('getCookieBySession');
         }
+        // else if (res.url.indexOf('https://e.waimai.meituan.com/new_fe/login#/login/continue?BSID=') !== -1){
+        //     ipcRenderer.send('getCookieBySession');
+        // }
     });
 </script>
 </html>
