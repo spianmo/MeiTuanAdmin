@@ -12,6 +12,13 @@ import './serialport'
 import './sqlite3'
 
 import axios from "axios";
+import {oaInfo} from "./local";
+import {poiInfo} from "./local"
+
+export {
+    oaInfo,
+    poiInfo
+}
 
 ipcMain.on('close-message', (event, arg) => {
     closeLoginWindow()

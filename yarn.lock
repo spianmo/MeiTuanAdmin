@@ -4812,17 +4812,17 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-vite-plugin-electron-renderer@0.6.0:
-  version "0.6.0"
-  resolved "https://mirrors.cloud.tencent.com/npm/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.6.0.tgz#ca553676ca06f6520fea6f9166c894a63869a677"
-  integrity sha512-4jQCrrPBzy8krQqOPIzqHVor3AxzBxfaDMbM0FimmFx/LLRQrgUg3gqFzKw8GqoXhftgY2gCfUlE0/SkyqthbQ==
+vite-plugin-electron-renderer@0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-electron-renderer/-/vite-plugin-electron-renderer-0.8.1.tgz#c397e521be696e0e2351fbd6bdb0b4e624fab287"
+  integrity sha512-NrpthnaxBfuoToI2XGu4HVwzSgie9QpU4SPSDcQquIidZspSNUkNAgUQN5I9rQ38hAAWDX8/CQv2LTGEZ7uYsQ==
 
-vite-plugin-electron@^0.8.0:
-  version "0.8.0"
-  resolved "https://mirrors.cloud.tencent.com/npm/vite-plugin-electron/-/vite-plugin-electron-0.8.0.tgz#9135bdd4bcfca29b1329f2bcf7f85b991a4eb620"
-  integrity sha512-0iVUJc/1OAKNolqqDqEflTy771DaAP8K1DbjCJx4d/BVYHhjd4q5/xYQE0BWr9x9F24i82FS84DzczezPmLS/Q==
+vite-plugin-electron@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/vite-plugin-electron/-/vite-plugin-electron-0.8.1.tgz#cd4f69e6da2a969e9758c18dbb591a3c3c2981ad"
+  integrity sha512-so13n0ytqaeWxK7bCza8G/qMxJSKYSunyAv4sNlPV9ahxyKmZMNaflWZ5mKBhTp2p7j3VJ0SapTzUDrHN/TjJQ==
   dependencies:
-    vite-plugin-electron-renderer "0.6.0"
+    vite-plugin-electron-renderer "0.8.1"
 
 vite-plugin-esmodule@^1.4.1:
   version "1.4.1"

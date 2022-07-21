@@ -4,8 +4,7 @@ import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
-import {oaInfo, poiInfo} from "./ipc/local";
-
+import {oaInfo, poiInfo} from "./ipc/index";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
