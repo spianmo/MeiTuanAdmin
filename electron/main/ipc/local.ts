@@ -161,6 +161,7 @@ ipcMain.on('getCookieBySession', (event, arg) => {
                 cookieJar += `${cookie.name}=${cookie.value}; `
             })
             console.log(cookieJar);
+            event.reply("onCookieBySession")
         }).catch((error) => {
         console.log(error)
     })

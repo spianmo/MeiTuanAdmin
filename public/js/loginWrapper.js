@@ -3,10 +3,6 @@ const ipcRenderer = require('electron').ipcRenderer
 const $ = (id) => document.getElementById(id)
 const $$ = (className) => document.getElementsByClassName(className)
 
-ipcRenderer.on('getCookie', () => {
-    ipcRenderer.sendToHost('receiveCookie', document.cookie)
-})
-
 ipcRenderer.on('sendAccount', (event, args) => {
     console.log("sendAccount", args)
     $('login').setAttribute("value", args.username);
