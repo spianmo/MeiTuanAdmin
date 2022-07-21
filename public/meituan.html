@@ -29,7 +29,7 @@
 
     const webview = document.getElementById('loginWrapper')
     webview.addEventListener('dom-ready', () => {
-        // webview.openDevTools();
+        //webview.openDevTools();
         webview.send('sendAccount', accountObject)
     });
     webview.addEventListener('ipc-message', async (res) => {
@@ -41,18 +41,20 @@
             name: wmPoiName,
             logo: POI_LOGO_URL,
         }
-        ipcRenderer.send('sendPoiInfo', wmObj)
-        ipcRenderer.send('closeMeiTuanLogin');
-        ipcRenderer.send('showMainWindow');
+        setTimeout(()=>{
+            ipcRenderer.send('sendPoiInfo', wmObj)
+            ipcRenderer.send('closeMeiTuanLogin');
+            ipcRenderer.send('showMainWindow');
+        }, 800)
     })
     webview.addEventListener('did-navigate',  (res) => {
         console.log("!! ", res.url)
         if (res.url.indexOf('https://e.waimai.meituan.com/?time=') !== -1) {
             webview.send('getCookie')
             ipcRenderer.send('getCookieBySession');
-        } else {
-            //ipcRenderer.send('closeMeiTuanLogin');
-            //ipcRenderer.send('showLoginWindow');
+        } else if (res.url.indexOf('https://e.waimai.meituan.com/new_fe/login#/login/continue?BSID=') !== -1){
+            webview.send('getCookie')
+            ipcRenderer.send('getCookieBySession');
         }
     });
 </script>

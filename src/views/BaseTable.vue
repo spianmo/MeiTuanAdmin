@@ -30,16 +30,24 @@
         </template>
       </el-table-column>
       <el-table-column sortable show-overflow-tooltip label='订单号' prop='key'/>
-      <el-table-column sortable align="center" label='姓名' prop='info.orderInfo.recipient_name'>
+      <el-table-column width="100" sortable align="center" label='姓名' prop='info.orderInfo.recipient_name'>
         <template #default='scope'>
           <el-tooltip :content="scope.row.info.orderInfo.orderCopyContent">
             {{ scope.row.info.orderInfo.recipient_name }}
           </el-tooltip>
+          <br v-if="scope.row.info.orderInfo.is_poi_first_order" />
+          <el-tag size="small" v-if="scope.row.info.orderInfo.is_poi_first_order" effect="light" round type="danger">门店新客</el-tag>
         </template>
       </el-table-column>
       <el-table-column sortable label='订单时间' width="160" show-overflow-tooltip
                        prop='info.orderInfo.order_time_fmt'></el-table-column>
-      <el-table-column label='隐私号码' prop='info.orderInfo.privacy_phone' show-overflow-tooltip></el-table-column>
+      <el-table-column align='center' label='隐私号码' prop='info.orderInfo.privacy_phone' show-overflow-tooltip>
+        <template #default='scope'>
+          {{
+            scope.row.info.orderInfo.privacy_phone?.split(',')[1] ?? ''
+          }}
+        </template>
+      </el-table-column>
       <el-table-column align='center' label='备用号码' prop='info.orderInfo.recipient_bindedPhone'>
         <template #default='scope'>
           {{
@@ -137,7 +145,7 @@ const exportData = async () => {
       recipient_name: item.info.orderInfo.recipient_name,
       orderTime: item.info.orderInfo.order_time_fmt,
       callTime: item.remarkTime,
-      privacyPhone: item.info.orderInfo.privacy_phone,
+      privacyPhone: item.info.orderInfo.privacy_phone?.split(',')[1] ?? '',
       recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
       recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
       status: item.status,
@@ -391,6 +399,8 @@ const callPhoneNumber = async (index, row) => {
   await callPhone(phone)
   row.status = "已回访"
   await updateOrder(row)
+  await db.collection('orders')
+      .update({key: order.key}, {remarkTime: formatTimeDate(new Date())})
 }
 
 </script>
