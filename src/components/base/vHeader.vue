@@ -48,6 +48,7 @@ import {onBeforeRouteUpdate} from "vue-router";
 import {ipcRenderer} from "electron";
 import currentDevice, {checkConnectionTask, getCallState, hangUpCall} from "../../utils/device";
 import {ElNotification} from "element-plus";
+import localConfig from "../../utils/memoryConfig";
 
 const store = useStore()
 let state = reactive({
@@ -93,7 +94,9 @@ const onDevicesChange = (device) => {
 
 ipcRenderer.on("onPoiInfoSend", async (event, args) => {
   console.log("onPoiInfoSend", args)
-  state.currentLabel = args.name ?? '美团外卖订单'
+  state.currentLabel = args.poiInfo.name ?? '美团外卖订单'
+  localConfig.mainTitle = '美团商家回访工具' + (args.poiInfo.name ? ' - ' + args.poiInfo.name : '') + (args.oaInfo.name ? ' - ' +args. oaInfo.name : '')
+  document.title = '美团商家回访工具' + (args.poiInfo.name ? ' - ' + args.poiInfo.name : '') + (args.oaInfo.name ? ' - ' +args. oaInfo.name : '')
 })
 
 const hangUp = async () => {

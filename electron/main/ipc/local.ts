@@ -56,6 +56,11 @@ ipcMain.on('save-config', (event, arg) => {
     })
 })
 
+export let oaInfo:any = {
+    name: '',
+    code: ''
+}
+
 ipcMain.on('get-oa-config', (event, arg) => {
     let profile = {}
     if (appStoreFs == null) return
@@ -65,6 +70,7 @@ ipcMain.on('get-oa-config', (event, arg) => {
         } else {
             debug("read config json:" + data)
             profile = JSON.parse(data);
+            oaInfo = profile
             event.reply("reply-oa-config", profile)
         }
     });
@@ -75,6 +81,7 @@ ipcMain.on('save-oa-config', (event, arg) => {
         debug("fs 载入失败")
         return;
     }
+    oaInfo = arg
     appStoreFs.writeFile("oa-config.json", JSON.stringify(arg, null, "  "), function (err) {
         if (err) {
             debug(err);
@@ -195,22 +202,22 @@ function getOrderList(payload: any, cb: any) {
         method: 'get',
         headers: header,
         jar: request.jar()
-    }, function (error:any, response:any, body:any) {
+    }, function (error: any, response: any, body: any) {
         cb(JSON.parse(body))
     });
 }
 
 ipcMain.on('getOrderList', (event: IpcMainEvent, arg: any) => {
-    getOrderList(arg, (body:any) => {
+    getOrderList(arg, (body: any) => {
         let _body = _.cloneDeep(body)
         if (!_body.data) {
             console.log("###", JSON.stringify(_body))
             event.reply("onOrderListSend", 'fuck')
             return
         }
-        let _wmOrderList:any = _.cloneDeep(_body.data.wmOrderList)
+        let _wmOrderList: any = _.cloneDeep(_body.data.wmOrderList)
         _body.data.wmOrderList = []
-        _wmOrderList.forEach((order:any) => {
+        _wmOrderList.forEach((order: any) => {
             let _order = _.cloneDeep(order)
             _order.commonInfo = JSON.parse(order.commonInfo)
             _order.orderInfo = JSON.parse(order.orderInfo)
@@ -220,7 +227,10 @@ ipcMain.on('getOrderList', (event: IpcMainEvent, arg: any) => {
     })
 })
 
-let poiInfo = {}
+export let poiInfo:any = {
+    name: '',
+    logo: ''
+}
 
 ipcMain.on('sendPoiInfo', (event: IpcMainEvent, arg: any) => {
     poiInfo = arg
@@ -228,7 +238,11 @@ ipcMain.on('sendPoiInfo', (event: IpcMainEvent, arg: any) => {
 })
 
 ipcMain.on('getPoiInfo', async (event: IpcMainEvent, arg: any) => {
-    event.reply("onPoiInfoSend", poiInfo)
+    let bundle: any = {
+        poiInfo: poiInfo,
+        oaInfo: oaInfo
+    }
+    event.reply("onPoiInfoSend", bundle)
 })
 
 ipcMain.on('clearAllCookie', (event: IpcMainEvent, arg: any) => {

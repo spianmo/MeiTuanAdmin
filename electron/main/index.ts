@@ -1,11 +1,10 @@
-import {app, BrowserWindow, dialog, ipcMain, Menu, session} from 'electron'
+import {app, BrowserWindow, Menu} from 'electron'
 import {release} from 'os'
 import './ipc/index'
 import {appConf} from './configuration'
 import {setTray} from './tray/index'
-import {log} from "electron-log";
-import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer';
-import Cookie = Electron.Cookie;
+import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer';
+import {oaInfo, poiInfo} from "./ipc/local";
 
 
 // Disable GPU Acceleration for Windows 7
@@ -58,7 +57,7 @@ function _createLoginWindow() {
 
 function _createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: '美团商家回访工具',
+        title: '美团商家回访工具' + (poiInfo.name ? ' - ' + poiInfo.name : '') + (oaInfo.name ? ' - ' + oaInfo.name : ''),
         width: 1200,
         height: 710,
         minHeight: 480,

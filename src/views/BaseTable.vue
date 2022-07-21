@@ -94,6 +94,7 @@ import {ipcRenderer, shell} from "electron";
 import {db} from "../plugins/database";
 import {ElNotification} from "element-plus";
 import device, {adbShell, callPhone, client, Uint8ArrayToString} from "../utils/device";
+import localConfig from "../utils/memoryConfig";
 
 const query = reactive({
   time: [new Date(new Date().setHours(0, 0, 0, 0)),
@@ -289,6 +290,7 @@ const getOrderSumNum = async () => {
       .find({status: '已回访'})
       .count()
   state.totalBackOrder = state.successBackOrder + faildBackOrder
+  document.title  = localConfig.mainTitle + ' 总回访：' + state.totalBackOrder + ' 已回访：' + state.successBackOrder
 }
 
 const pageQueryOrders = async () => {
