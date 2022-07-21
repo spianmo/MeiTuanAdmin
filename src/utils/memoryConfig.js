@@ -1,5 +1,6 @@
 let localConfig = {
-    mainTitle: ''
+    mainTitle: '',
+    info: {}
 }
 
 export default localConfig

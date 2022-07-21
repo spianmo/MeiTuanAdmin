@@ -4,11 +4,11 @@ import 'dexie-mongoify'
 const dbName = 'electron-init'
 
 const db = new Dexie(dbName)
-const dbVersion = 5
+const dbVersion = 6
 
 function initDb() {
     db.version(dbVersion).stores({
-        orders: 'key, info, status, remark, orderTime',
+        orders: 'key, info, status, remark, remarkTime, orderTime',
     })
     db.open().then(r => {
         console.log('db opened')

@@ -18,7 +18,7 @@
       <div>
         <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
         <el-button type="primary" icon="Coin" @click="getData">查询本地数据</el-button>
-        <el-button type="info" icon="TakeawayBox" round>导出</el-button>
+        <el-button type="info" icon="TakeawayBox" @click="exportData" round>导出</el-button>
       </div>
     </div>
     <el-table v-loading="state.loading" ref='multipleTable' :data='tableData' border class='table'
@@ -90,11 +90,12 @@
 
 <script setup>
 import {onMounted, reactive, ref} from 'vue'
-import {ipcRenderer, shell} from "electron";
+import {ipcRenderer} from "electron";
 import {db} from "../plugins/database";
 import {ElNotification} from "element-plus";
-import device, {adbShell, callPhone, client, Uint8ArrayToString} from "../utils/device";
+import device, {callPhone} from "../utils/device";
 import localConfig from "../utils/memoryConfig";
+import * as XLSX from "xlsx";
 
 const query = reactive({
   time: [new Date(new Date().setHours(0, 0, 0, 0)),
@@ -126,6 +127,40 @@ const getData = async () => {
   })
 }
 
+const exportData = async () => {
+  let raw = await db.collection('orders').reverse().toArray()
+  let rows = []
+  rows.push({})
+  raw.forEach((item, index)=>{
+    rows.push({
+      id: index + 1,
+      recipient_name: item.info.orderInfo.recipient_name,
+      orderTime: item.info.orderInfo.order_time_fmt,
+      callTime: item.remarkTime,
+      privacyPhone: item.info.orderInfo.privacy_phone,
+      recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
+      recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
+      status: item.status,
+      remark: item.remark,
+      staff: localConfig.info.oaInfo.name
+    })
+  })
+  console.log(rows)
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+
+  worksheet['!merges'] = [
+    {s: {r: 0, c: 0}, e: {r: 0, c: 9}}
+  ];
+
+  let title = localConfig.mainTitle+ '总回访数量:' + state.totalBackOrder + '成功回访数量' + state.successBackOrder
+  XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", "顾客姓名", "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
+      {origin: "A1"});
+  XLSX.utils.book_append_sheet(workbook, worksheet, "总表");
+  worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
+  XLSX.writeFile(workbook, `【美团】${localConfig.info.poiInfo.name}-${localConfig.info.oaInfo.name}.xlsx`);
+}
+
 const handlePageChange = (val) => {
   query.page = val
   getData()
@@ -152,6 +187,21 @@ const formatTime = (data) => {
   if (month < 10) month = "0" + month
   if (_date < 10) _date = "0" + _date
   return year + "-" + month + "-" + _date
+}
+
+const formatTimeDate = (time) => {
+  let year = time.getFullYear()
+  let month = time.getMonth() + 1
+  let day = time.getDate()
+  let hour = time.getHours()
+  let minute = time.getMinutes()
+  let second = time.getSeconds()
+  if (month < 10) month = "0" + month
+  if (day < 10) day = "0" + day
+  if (hour < 10) hour = "0" + hour
+  if (minute < 10) minute = "0" + minute
+  if (second < 10) second = "0" + second
+  return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
 }
 
 let fetchPayload = {
@@ -193,6 +243,8 @@ const updateOrderStatus = async (order) => {
   order.status = stateMachine[(stateMachine.findIndex(t => t === order.status) + 1) % 3]
   console.log(order)
   await updateOrder(order)
+  await db.collection('orders')
+      .update({key: order.key}, {remarkTime: formatTimeDate(new Date())})
   await getData()
 }
 
@@ -203,7 +255,7 @@ const updateOrder = async (order) => {
 
 const updateRemark = async (order) => {
   console.log(order)
-  return await db.collection('orders')
+  await db.collection('orders')
       .update({key: order.key}, {remark: order.remark})
 }
 
@@ -214,7 +266,8 @@ const insertOrder = async (orderId, order) => {
         info: order,
         status: '未回访',
         remark: '',
-        orderTime: order.commonInfo.order_time
+        orderTime: order.commonInfo.order_time,
+        remarkTime: ''
       })
       .catch(e => {
         //console.log(e)
