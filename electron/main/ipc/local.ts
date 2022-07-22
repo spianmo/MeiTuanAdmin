@@ -130,6 +130,10 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
     })
 })
 
+export const refreshMtLoginWindow = () => {
+    mtLoginWindow?.webContents.send('refreshWebview')
+}
+
 ipcMain.on('closeMeiTuanLogin', (event, arg) => {
     mtLoginWindow?.close()
 })
