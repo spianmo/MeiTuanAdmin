@@ -9,6 +9,7 @@ import Cookie = Electron.Cookie;
 import {clearAllData} from "./ipc/index";
 import ipcMain = Electron.ipcMain;
 import {refreshMtLoginWindow} from "./ipc/index";
+import {error, log} from "electron-log";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -92,22 +93,26 @@ function _createMainWindow() {
 }
 
 app.on('ready', async () => {
-    clearAllData()
+    if (!app.isPackaged) {
+        clearAllData()
+    }
     setTray();
     await _createLoginWindow();
     installExtension(VUEJS_DEVTOOLS.id)
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
-    // session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-    //     if (details.uploadData) {
-    //         const buffer = Array.from(details.uploadData)[0].bytes;
-    //         if (buffer.toString().indexOf(encodeURIComponent('登录出错,请刷新页面后重新登录')) !== -1){
-    //             refreshMtLoginWindow()
-    //         }
-    //         //console.log('Request body: ', decodeURIComponent(buffer.toString()));
-    //     }
-    //     callback(details);
-    // })
+    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+        if (details.uploadData) {
+            const buffer = Array.from(details.uploadData)[0].bytes;
+            if (buffer.toString().indexOf(encodeURIComponent('登录出错,请刷新页面后重新登录')) !== -1){
+                error("refreshMtLoginWindow")
+                console.log('Request body: ', decodeURIComponent(buffer.toString()));
+                refreshMtLoginWindow()
+            }
+            //console.log('Request body: ', decodeURIComponent(buffer.toString()));
+        }
+        callback(details);
+    })
 });
 
 app.on('window-all-closed', () => {

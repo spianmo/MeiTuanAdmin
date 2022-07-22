@@ -123,7 +123,7 @@ ipcMain.on('openMeiTuanLogin', (event, arg) => {
         },
     })
     mtLoginWindow.loadFile(appConf.meituanHtml)
-    mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    //mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     mtLoginWindow?.on('ready-to-show', function () {
         mtLoginWindow?.webContents?.send('receiveCookie', arg);
         mtLoginWindow?.show()

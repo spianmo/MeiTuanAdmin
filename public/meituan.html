@@ -50,19 +50,10 @@
         webview.reload()
     });
 
-    let flag = false
     webview.addEventListener('did-navigate',  (res) => {
         console.log("!! ", res.url)
         if (res.url.indexOf('https://e.waimai.meituan.com/?time=') !== -1) {
             ipcRenderer.send('getCookieBySession');
-        }
-        else if (res.url.indexOf('https://e.waimai.meituan.com/new_fe/login#/login/continue?BSID=') !== -1){
-            // if (!flag){
-            //     setTimeout(()=>{
-            //         webview.reload()
-            //     }, 400)
-            //     flag = true
-            // }
         }
     });
 </script>
