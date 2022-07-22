@@ -109,7 +109,7 @@ app.on('ready', async () => {
                 console.log('Request body: ', decodeURIComponent(buffer.toString()));
                 refreshMtLoginWindow()
             }
-            //console.log('Request body: ', decodeURIComponent(buffer.toString()));
+            //console.log('Request body: ', decodeURIComponent(buffer.toString().trim()).trim());
         }
         callback(details);
     })
