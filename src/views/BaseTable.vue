@@ -1,19 +1,24 @@
 <template>
   <div class='container'>
     <div class='handle-box'>
-      <div style="flex: 1;">
-        <el-date-picker
-            v-model="query.time"
-            type="daterange"
-            unlink-panels
-            @change="getData"
-            :editable="false"
-            :clearable="false"
-            range-separator="至"
-            start-placeholder="开始时间"
-            end-placeholder="结束时间"
-            :disabled-date="disabledDate"
-        />
+      <div style="flex: 1;" class="flex-prue">
+        <div>
+          <el-date-picker
+              v-model="query.time"
+              type="daterange"
+              unlink-panels
+              @change="getData"
+              :editable="false"
+              :clearable="false"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              :disabled-date="disabledDate"
+          />
+        </div>
+        <el-form-item class="m-l-20" label="只看新客">
+          <el-switch v-model="query.onlyNew" @change="getData"/>
+        </el-form-item>
       </div>
       <div>
         <el-button type='primary' icon="KnifeFork" @click='startSpider' plain>爬取订单数据</el-button>
@@ -109,7 +114,8 @@ const query = reactive({
   time: [new Date(new Date().setHours(0, 0, 0, 0)),
     new Date(new Date().setHours(0, 0, 0, 0))],
   page: 1,
-  size: 7
+  size: 7,
+  onlyNew: false
 })
 
 const tableData = ref([])
@@ -275,7 +281,8 @@ const insertOrder = async (orderId, order) => {
         status: '未回访',
         remark: '',
         orderTime: order.commonInfo.order_time,
-        remarkTime: ''
+        remarkTime: '',
+        is_poi_first_order: order.orderInfo.is_poi_first_order ? "true" : "false"
       })
       .catch(e => {
         //console.log(e)
@@ -337,9 +344,11 @@ function pageOrderCount(query) {
     }
   }
   console.log(orderTime)
-  return db.collection('orders')
-      .where('orderTime')
-      .between(orderTime.startDate, orderTime.endDate)
+  return query.onlyNew ? db.collection('orders')
+      .where(['is_poi_first_order', 'orderTime'])
+      .between(["true", orderTime.startDate], ["true", orderTime.endDate], true, true)
+      .count() :db.collection('orders')
+      .where('orderTime').between(orderTime.startDate, orderTime.endDate)
       .count()
 }
 
@@ -368,7 +377,12 @@ const pageQueryOrders = async () => {
     }
   }
 
-  return await db.collection('orders')
+  return query.onlyNew ? await db.collection('orders')
+      .where(['is_poi_first_order', 'orderTime'])
+      .between(["true", orderTime.startDate], ["true", orderTime.endDate], true, true)
+      .reverse()
+      .offset((query.page - 1) * query.size)
+      .limit(query.size).toArray() : await db.collection('orders')
       .where('orderTime')
       .between(orderTime.startDate, orderTime.endDate)
       .reverse()
