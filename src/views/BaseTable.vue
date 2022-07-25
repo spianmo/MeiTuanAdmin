@@ -141,6 +141,46 @@ const getData = async () => {
   })
 }
 
+const dataByGroup = async (workbook) => {
+  const result = {}
+  let dataByGroup = await db.collection('orders').reverse().toArray()
+  dataByGroup.forEach(item=>{
+    if (!item.remarkDay) return
+    result[item.remarkDay] = !result[item.remarkDay] ? [item] : result[item.remarkDay].push(item)
+  })
+  console.log("group", result)
+  Object.keys(result).forEach(key=>{
+    let rows = []
+    rows.push({})
+    result[key].forEach((item, index)=>{
+      rows.push({
+        id: index + 1,
+        recipient_name: item.info.orderInfo.recipient_name,
+        orderTime: item.info.orderInfo.order_time_fmt,
+        callTime: item.remarkTime,
+        privacyPhone: item.info.orderInfo.privacy_phone?.split(',')[1] ?? '',
+        recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
+        recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
+        status: item.status,
+        remark: item.remark,
+        staff: localConfig.info.oaInfo.name
+      })
+    })
+    console.log(rows)
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+
+    worksheet['!merges'] = [
+      {s: {r: 0, c: 0}, e: {r: 0, c: 9}}
+    ];
+
+    let title = localConfig.mainTitle+ ' ' + key + '成功回访数量: ' + (result[key]?.length ?? 0)
+    XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", "顾客姓名", "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
+        {origin: "A1"});
+    XLSX.utils.book_append_sheet(workbook, worksheet, key);
+    worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
+  })
+}
+
 const exportData = async () => {
   let raw = await db.collection('orders').reverse().toArray()
   let rows = []
@@ -172,6 +212,7 @@ const exportData = async () => {
       {origin: "A1"});
   XLSX.utils.book_append_sheet(workbook, worksheet, "总表");
   worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
+  await dataByGroup(workbook)
   XLSX.writeFile(workbook, `【美团】${localConfig.info.poiInfo.name}-${localConfig.info.oaInfo.name}.xlsx`);
 }
 
@@ -218,6 +259,15 @@ const formatTimeDate = (time) => {
   return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
 }
 
+const formatTimeDay = (time) => {
+  let year = time.getFullYear()
+  let month = time.getMonth() + 1
+  let day = time.getDate()
+  if (month < 10) month = "0" + month
+  if (day < 10) day = "0" + day
+  return year + "-" + month + "-" + day
+}
+
 let fetchPayload = {
   tag: "complete",
   startDate: "",
@@ -258,7 +308,10 @@ const updateOrderStatus = async (order) => {
   console.log(order)
   await updateOrder(order)
   await db.collection('orders')
-      .update({key: order.key}, {remarkTime: formatTimeDate(new Date())})
+      .update({key: order.key}, {
+        remarkTime: formatTimeDate(new Date()),
+        remarkDay: formatTimeDay(new Date()),
+      })
   await getData()
 }
 
@@ -282,6 +335,7 @@ const insertOrder = async (orderId, order) => {
         remark: '',
         orderTime: order.commonInfo.order_time,
         remarkTime: '',
+        remarkDay: '',
         is_poi_first_order: order.orderInfo.is_poi_first_order ? "true" : "false"
       })
       .catch(e => {
@@ -414,7 +468,10 @@ const callPhoneNumber = async (index, row) => {
   row.status = "已回访"
   await updateOrder(row)
   await db.collection('orders')
-      .update({key: order.key}, {remarkTime: formatTimeDate(new Date())})
+      .update({key: order.key}, {
+        remarkTime: formatTimeDate(new Date()),
+        remarkDay: formatTimeDay(new Date()),
+      })
 }
 
 </script>
