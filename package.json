@@ -1,6 +1,6 @@
 {
   "name": "MeiTuanAdmin",
-  "version": "1.0.0",
+  "version": "1.5.0",
   "main": "dist/electron/main/index.js",
   "description": "MeiTuan Admin.",
   "author": "Finger <finger@spianmo.com>",
