@@ -31,7 +31,7 @@ ipcMain.on('open-browser-message', (event, arg) => {
 ipcMain.on('get-config', (event, arg) => {
     let profile = {}
     if (appStoreFs == null) return
-    appStoreFs.readFile('config.json', 'utf-8', function (err, data) {
+    appStoreFs.readFile(`config-${arg.username}.json`, 'utf-8', function (err, data) {
         if (err) {
             debug("读取json配置文件失败")
         } else {
@@ -47,7 +47,7 @@ ipcMain.on('save-config', (event, arg) => {
         debug("fs 载入失败")
         return;
     }
-    appStoreFs.writeFile("config.json", JSON.stringify(arg, null, "  "), function (err) {
+    appStoreFs.writeFile(`config-${arg.username}.json`, JSON.stringify(arg, null, "  "), function (err) {
         if (err) {
             debug(err);
         } else {
@@ -140,6 +140,10 @@ export const onCookieBySession = () => {
 
 ipcMain.on('closeMeiTuanLogin', (event, arg) => {
     mtLoginWindow?.close()
+})
+
+ipcMain.on('hideMeiTuanLogin', () => {
+    mtLoginWindow?.hide()
 })
 
 ipcMain.on('closeLogin', (event, arg) => {

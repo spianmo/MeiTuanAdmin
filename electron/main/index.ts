@@ -18,10 +18,10 @@ if (release().startsWith('6.1')) app.disableHardwareAcceleration()
 // Set application name for Windows 10+ notifications
 if (process.platform === 'win32') app.setAppUserModelId(app.getName())
 
-if (!app.requestSingleInstanceLock()) {
-    app.quit()
-    process.exit(0)
-}
+// if (!app.requestSingleInstanceLock()) {
+//     app.quit()
+//     process.exit(0)
+// }
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 if (process.mas) app.setName('MeiTuanAdmin');
@@ -104,7 +104,6 @@ app.on('ready', async () => {
         .catch((err) => console.log('An error occurred: ', err));
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
         if (details.url.indexOf('/v2/chat/im/shop/logo') !== -1) {
-            console.log(details.url)
             setTimeout(()=>{
                 onCookieBySession()
             }, 800)
@@ -131,19 +130,19 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit()
 })
 
-app.on('second-instance', () => {
-    if (mainWindow) {
-        // Focus on the main window if the user tried to open another
-        if (mainWindow.isMinimized()) mainWindow.restore()
-        mainWindow.focus()
-        return
-    }
-    if (loginWindow) {
-        // Focus on the main window if the user tried to open another
-        if (loginWindow.isMinimized()) loginWindow.restore()
-        loginWindow.focus()
-    }
-})
+// app.on('second-instance', () => {
+//     if (mainWindow) {
+//         // Focus on the main window if the user tried to open another
+//         if (mainWindow.isMinimized()) mainWindow.restore()
+//         mainWindow.focus()
+//         return
+//     }
+//     if (loginWindow) {
+//         // Focus on the main window if the user tried to open another
+//         if (loginWindow.isMinimized()) loginWindow.restore()
+//         loginWindow.focus()
+//     }
+// })
 
 app.on('activate', async () => {
     const allWindows = BrowserWindow.getAllWindows()
