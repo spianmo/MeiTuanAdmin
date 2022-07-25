@@ -103,10 +103,11 @@ app.on('ready', async () => {
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-        if (details.url.indexOf('/api/poi/poiList') !== -1) {
+        if (details.url.indexOf('/v2/chat/im/shop/logo') !== -1) {
+            console.log(details.url)
             setTimeout(()=>{
                 onCookieBySession()
-            }, 8000)
+            }, 800)
         }
 
         if (details.uploadData) {
