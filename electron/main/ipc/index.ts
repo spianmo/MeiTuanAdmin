@@ -16,12 +16,14 @@ import {oaInfo} from "./local";
 import {poiInfo} from "./local"
 import {clearAllData} from "./local";
 import {refreshMtLoginWindow} from "./local"
+import {onCookieBySession} from "./local";
 
 export {
     oaInfo,
     poiInfo,
     clearAllData,
-    refreshMtLoginWindow
+    refreshMtLoginWindow,
+    onCookieBySession
 }
 
 ipcMain.on('close-message', (event, arg) => {

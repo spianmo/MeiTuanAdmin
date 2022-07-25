@@ -9,6 +9,7 @@ import Cookie = Electron.Cookie;
 import {clearAllData} from "./ipc/index";
 import ipcMain = Electron.ipcMain;
 import {refreshMtLoginWindow} from "./ipc/index";
+import {onCookieBySession} from "./ipc/index"
 import {error, log} from "electron-log";
 
 // Disable GPU Acceleration for Windows 7
@@ -102,14 +103,21 @@ app.on('ready', async () => {
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
     session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
+        if (details.url.indexOf('/api/poi/poiList') !== -1) {
+            setTimeout(()=>{
+                onCookieBySession()
+            }, 8000)
+        }
+
         if (details.uploadData) {
-            const buffer = Array.from(details.uploadData)[0].bytes;
+            const buffer = Array.from(details.uploadData)[0]?.bytes;
+            if (!buffer) return
             if (buffer.toString().indexOf(encodeURIComponent('登录出错,请刷新页面后重新登录')) !== -1){
                 error("refreshMtLoginWindow")
-                console.log('Request body: ', decodeURIComponent(buffer.toString()));
+                //console.log('Request body: ', decodeURIComponent(buffer.toString()));
                 refreshMtLoginWindow()
             }
-            //console.log('Request body: ', decodeURIComponent(buffer.toString().trim()).trim());
+            //log('Request body: ', decodeURIComponent(buffer.toString().trim()).trim());
         }
         callback(details);
     })

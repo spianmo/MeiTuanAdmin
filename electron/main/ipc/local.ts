@@ -1,7 +1,7 @@
 /* Show a message box */
 import {app, BrowserWindow, dialog, ipcMain, session, shell} from "electron";
 import appStoreFs from "fs";
-import {debug} from "electron-log";
+import {debug, log} from "electron-log";
 import {appConf} from "../configuration";
 import {closeLoginWindow, closeMainWindow, createLoginWindow, createMainWindow, showMainWindow} from "../index";
 import _ from "lodash";
@@ -134,6 +134,10 @@ export const refreshMtLoginWindow = () => {
     mtLoginWindow?.webContents.send('refreshWebview')
 }
 
+export const onCookieBySession = () => {
+    mtLoginWindow?.webContents.send('onCookieBySession')
+}
+
 ipcMain.on('closeMeiTuanLogin', (event, arg) => {
     mtLoginWindow?.close()
 })
@@ -154,6 +158,10 @@ ipcMain.on('closeMainWindow', (event, arg) => {
     closeMainWindow()
 })
 
+ipcMain.on('terminalLog', (event, arg) => {
+    log(arg)
+})
+
 export let cookiesRawKV: Cookie[] = []
 export let cookieJar: string = ""
 
@@ -165,7 +173,7 @@ ipcMain.on('getCookieBySession', (event, arg) => {
                 cookieJar += `${cookie.name}=${cookie.value}; `
             })
             console.log(cookieJar);
-            event.reply("onCookieBySession")
+            //event.reply("onCookieBySession")
         }).catch((error) => {
         console.log(error)
     })

@@ -41,6 +41,8 @@
             name: wmPoiName,
             logo: POI_LOGO_URL,
         }
+        // let localStorage = await webview.executeJavaScript(`localStorage`)
+        // ipcRenderer.send('terminalLog', JSON.stringify(localStorage))
         ipcRenderer.send('sendPoiInfo', wmObj)
         ipcRenderer.send('closeMeiTuanLogin');
         ipcRenderer.send('showMainWindow');
