@@ -1,12 +1,13 @@
 /* Show a message box */
 import {app, BrowserWindow, dialog, ipcMain, session, shell} from "electron";
 import appStoreFs from "fs";
-import {debug, log} from "electron-log";
+import {debug, error, log} from "electron-log";
 import {appConf} from "../configuration";
 import {closeLoginWindow, closeMainWindow, createLoginWindow, createMainWindow, showMainWindow} from "../index";
 import _ from "lodash";
 import Cookie = Electron.Cookie;
 import IpcMainEvent = Electron.IpcMainEvent;
+import {GlobalConfig} from "../config";
 
 function msg(str: string) {
     const options =
@@ -47,12 +48,32 @@ ipcMain.on('save-config', (event, arg) => {
         debug("fs 载入失败")
         return;
     }
+    GlobalConfig.sessionNameSpace = `persist:namespace-${arg.username}`
     appStoreFs.writeFile(`config-${arg.username}.json`, JSON.stringify(arg, null, "  "), function (err) {
         if (err) {
             debug(err);
         } else {
             debug("配置保存成功")
         }
+    })
+    session.fromPartition(GlobalConfig.sessionNameSpace).webRequest.onBeforeSendHeaders((details, callback) => {
+        if (details.url.indexOf('/v2/chat/im/shop/logo') !== -1) {
+            setTimeout(()=>{
+                onCookieBySession()
+            }, 800)
+        }
+
+        if (details.uploadData) {
+            const buffer = Array.from(details.uploadData)[0]?.bytes;
+            if (!buffer) return
+            if (buffer.toString().indexOf(encodeURIComponent('登录出错,请刷新页面后重新登录')) !== -1){
+                error("refreshMtLoginWindow")
+                //console.log('Request body: ', decodeURIComponent(buffer.toString()));
+                refreshMtLoginWindow()
+            }
+            //log('Request body: ', decodeURIComponent(buffer.toString().trim()).trim());
+        }
+        callback(details);
     })
 })
 
@@ -114,16 +135,18 @@ ipcMain.on('open-win', (event, arg) => {
 let mtLoginWindow: BrowserWindow | null = null
 
 ipcMain.on('openMeiTuanLogin', (event, arg) => {
+    console.log((GlobalConfig.sessionNameSpace))
     mtLoginWindow = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
             webviewTag: true,
+            session: session.fromPartition(GlobalConfig.sessionNameSpace)
             //preload: appConf.mtloginWrapper
         },
     })
-    mtLoginWindow.loadFile(appConf.meituanHtml)
-    //mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
+    mtLoginWindow.loadFile(`${appConf.meituanHtml}`, {search: GlobalConfig.sessionNameSpace})
+    mtLoginWindow.webContents.openDevTools({ mode: "undocked", activate: true })
     mtLoginWindow?.on('ready-to-show', function () {
         mtLoginWindow?.webContents?.send('receiveCookie', arg);
         mtLoginWindow?.show()
@@ -170,7 +193,7 @@ export let cookiesRawKV: Cookie[] = []
 export let cookieJar: string = ""
 
 ipcMain.on('getCookieBySession', (event, arg) => {
-    session.defaultSession.cookies.get({})
+    session.fromPartition(GlobalConfig.sessionNameSpace).cookies.get({})
         .then((cookies: Cookie[]) => {
             cookiesRawKV = cookies
             cookies.forEach(cookie => {
@@ -263,12 +286,12 @@ ipcMain.on('getPoiInfo', async (event: IpcMainEvent, arg: any) => {
 })
 
 export const clearAllData = () => {
-    session.defaultSession.clearStorageData({
+    session.fromPartition(GlobalConfig.sessionNameSpace).clearStorageData({
         storages: [
             'indexdb'
         ]
     });
-    session.defaultSession.cookies.get({})
+    session.fromPartition(GlobalConfig.sessionNameSpace).cookies.get({})
         .then((cookies: Cookie[]) => {
             cookies.forEach(cookie => {
                 let url = '';

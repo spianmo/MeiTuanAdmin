@@ -269,7 +269,7 @@
             if (requestObject.username !== accountJar.username ||
                 requestObject.password !== accountJar.password) {
                 ipcRenderer.send('save-config', requestObject)
-                ipcRenderer.send('clearAllCookie')
+                //ipcRenderer.send('clearAllCookie')
             }
             let OARequestObject = {
                 name: $("#m_username").val(),

@@ -11,6 +11,7 @@ import ipcMain = Electron.ipcMain;
 import {refreshMtLoginWindow} from "./ipc/index";
 import {onCookieBySession} from "./ipc/index"
 import {error, log} from "electron-log";
+import {GlobalConfig} from "./config";
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
@@ -44,6 +45,7 @@ function _createLoginWindow() {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            session: session.fromPartition(GlobalConfig.sessionNameSpace)
         },
         icon: appConf.icon,
         show: false
@@ -73,6 +75,7 @@ function _createMainWindow() {
             preload: appConf.preload,
             nodeIntegration: true,
             contextIsolation: false,
+            session: session.fromPartition(GlobalConfig.sessionNameSpace)
         },
     })
 
@@ -95,32 +98,13 @@ function _createMainWindow() {
 
 app.on('ready', async () => {
     if (!app.isPackaged) {
-        clearAllData()
+        //clearAllData()
     }
     setTray();
     await _createLoginWindow();
     installExtension(VUEJS_DEVTOOLS.id)
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
-    session.defaultSession.webRequest.onBeforeSendHeaders((details, callback) => {
-        if (details.url.indexOf('/v2/chat/im/shop/logo') !== -1) {
-            setTimeout(()=>{
-                onCookieBySession()
-            }, 800)
-        }
-
-        if (details.uploadData) {
-            const buffer = Array.from(details.uploadData)[0]?.bytes;
-            if (!buffer) return
-            if (buffer.toString().indexOf(encodeURIComponent('登录出错,请刷新页面后重新登录')) !== -1){
-                error("refreshMtLoginWindow")
-                //console.log('Request body: ', decodeURIComponent(buffer.toString()));
-                refreshMtLoginWindow()
-            }
-            //log('Request body: ', decodeURIComponent(buffer.toString().trim()).trim());
-        }
-        callback(details);
-    })
 });
 
 app.on('window-all-closed', () => {

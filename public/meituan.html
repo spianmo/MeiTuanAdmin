@@ -19,6 +19,8 @@
 </body>
 <script>
 
+    document.getElementById("loginWrapper").setAttribute("partition", location.search.slice(1))
+
     const {clipboard, remote, Menu, MenuItem, ipcRenderer} = require('electron');
 
     let accountObject = {}

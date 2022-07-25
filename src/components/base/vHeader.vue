@@ -166,7 +166,7 @@ onBeforeRouteUpdate((to) => {
 
 .header .logo {
   float: left;
-  width: 250px;
+  width: 800px;
   line-height: 50px;
   color: #000000;
   font-size: 16px;
