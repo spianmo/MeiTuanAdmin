@@ -24,7 +24,7 @@ export const saveConfig = async (arg) => {
     }
     GlobalConfig.sessionNameSpace = `persist:namespace-${arg.username}`
 
-    let config = await _getConfig()
+    let config = await getRawConfig()
     config[arg.username] = arg
     GlobalConfig.wmInfo = config[arg.username]
 
@@ -37,7 +37,7 @@ export const saveConfig = async (arg) => {
     })
 }
 
-const _getConfig = () => {
+export const getRawConfig = () => {
     if (appStoreFs == null) return
     return new Promise((resolve, reject)=>{
         appStoreFs.readFile(`config.json`, 'utf-8', (err, data) => {
@@ -53,7 +53,7 @@ const _getConfig = () => {
 }
 
 export const getConfig = async (username) => {
-    let config = await _getConfig()
+    let config = await getRawConfig()
     GlobalConfig.wmInfo = config[username]
     return config[username]
 }
@@ -73,7 +73,19 @@ export const saveOAConfig = (arg) => {
     })
 }
 
-export const getOAConfig = (callback) => {
+export const getOAConfig = () => {
     if (appStoreFs == null) return
-    appStoreFs.readFile('oa-config.json', 'utf-8', callback);
+    return new Promise((resolve, reject) => {
+        appStoreFs.readFile('oa-config.json', 'utf-8', (err, data) => {
+            if (err) {
+                debug("读取OA json配置文件失败")
+                resolve({})
+            } else {
+                debug("read config json:" + data)
+                let profile = JSON.parse(data);
+                GlobalConfig.oaInfo = profile
+                resolve(profile)
+            }
+        });
+    })
 }

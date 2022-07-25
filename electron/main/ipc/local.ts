@@ -40,19 +40,10 @@ ipcMain.on('save-config', async (event, arg) => {
     })
 })
 
-ipcMain.on('get-oa-config', (event, arg) => {
-    let profile:any = {}
+ipcMain.on('get-oa-config', async (event, arg) => {
     if (appStoreFs == null) return
-    getOAConfig((err:any, data:any) => {
-        if (err) {
-            debug("读取OA json配置文件失败")
-        } else {
-            debug("read config json:" + data)
-            profile = JSON.parse(data);
-            GlobalConfig.oaInfo = profile
-            event.reply("reply-oa-config", profile)
-        }
-    });
+    let config = await getOAConfig();
+    event.reply("reply-oa-config", config)
 })
 
 ipcMain.on('save-oa-config', (event, arg) => {
