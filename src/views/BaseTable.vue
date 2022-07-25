@@ -146,7 +146,6 @@ const dataByGroup = async (workbook) => {
   let dataByGroup = await db.collection('orders').reverse().toArray()
   dataByGroup.forEach(item=>{
     if (!item.remarkDay) return
-    console.log(result[item.remarkDay])
     if (!result[item.remarkDay]) {
       result[item.remarkDay] = [item]
     } else {
