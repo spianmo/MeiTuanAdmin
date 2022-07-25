@@ -12,15 +12,11 @@ import './serialport'
 import './sqlite3'
 
 import axios from "axios";
-import {oaInfo} from "./local";
-import {poiInfo} from "./local"
 import {clearAllData} from "./local";
 import {refreshMtLoginWindow} from "./local"
 import {onCookieBySession} from "./local";
 
 export {
-    oaInfo,
-    poiInfo,
     clearAllData,
     refreshMtLoginWindow,
     onCookieBySession
