@@ -74,9 +74,9 @@ function _createMainWindow() {
 
     if (app.isPackaged) {
         mainWindow.loadFile(appConf.indexHtml)
-        // mainWindow.webContents.openDevTools({
-        //     mode: "detach"
-        // })
+        mainWindow.webContents.openDevTools({
+            mode: "detach"
+        })
     } else {
         mainWindow.loadURL(appConf.url)
         mainWindow.webContents.openDevTools({

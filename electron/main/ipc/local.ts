@@ -43,6 +43,7 @@ ipcMain.on('save-config', async (event, arg) => {
 ipcMain.on('get-oa-config', async (event, arg) => {
     if (appStoreFs == null) return
     let config = await getOAConfig();
+    if (Object.keys(config).length === 0) return
     event.reply("reply-oa-config", config)
 })
 
