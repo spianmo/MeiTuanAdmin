@@ -27,14 +27,14 @@
         ]
       }
     ],
-//    "icon": "favicon.ico",
+    "icon": "favicon.ico",
     "artifactName": "${productName}_${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
     "perMachine": false,
-//    "installerIcon": "favicon.ico",
-//    "installerHeaderIcon": "favicon.ico",
+    "installerIcon": "favicon.ico",
+    "installerHeaderIcon": "favicon.ico",
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false
   }
