@@ -1,22 +1,34 @@
 import * as fs from "fs";
 import * as util from "util";
 
-async function copyFolder(folder) {
-    console.log(fs.existsSync(folder.dest));
+//拷贝文件夹
+function copyFolderSync(src, dest) {
+    let files = fs.readdirSync(src);
+    files.forEach(function (file) {
+        const curPath = src + "/" + file;
+        if (fs.statSync(curPath).isDirectory()) {
+            copyFolderSync(curPath, dest + "/" + file);
+        } else {
+            fs.copyFileSync(curPath, dest + "/" + file);
+        }
+    });
+}
+
+function copyFolder(folder) {
     if (!fs.existsSync(folder.dest)) {
         console.log(`创建目录：${folder.dest}`);
-        await util.promisify(fs.mkdir)(folder.dest);
+        fs.mkdirSync(folder.dest);
     }
-    await util.promisify(fs.copyFile)(folder.src, folder.dest)
+    copyFolderSync(folder.src, folder.dest)
 }
 
-async function copyFiles(files) {
+function copyFiles(files) {
     for (const file of files) {
-        await copyFolder(file)
+        copyFolder(file)
     }
 }
 
-await copyFiles([
+copyFiles([
     { src: './node_modules/adbkit/lib', dest: './node_modules/adbkit/src' },
     { src: './node_modules/adbkit-logcat/lib', dest: './node_modules/adbkit-logcat/src' },
     { src: './node_modules/adbkit-monkey/lib', dest: './node_modules/adbkit-monkey/src' },
