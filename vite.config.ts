@@ -14,6 +14,7 @@ export default defineConfig({
             'execa',
             'node-fetch',
             'file-type',
+            'fs-extra',
             'move-file',
             'node-schedule',
             'adbkit',

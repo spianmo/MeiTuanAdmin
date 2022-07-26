@@ -1,6 +1,6 @@
 {
   "name": "MeiTuanAdmin",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "dist/electron/main/index.js",
   "description": "MeiTuan Admin.",
   "author": "Finger <finger@spianmo.com>",
@@ -19,6 +19,7 @@
     "electron-log": "^4.4.7",
     "execa": "^6.1.0",
     "file-type": "^17.1.2",
+    "fs-extra": "^10.1.0",
     "move-file": "^3.0.0",
     "node-fetch": "^3.2.4",
     "node-schedule": "^1.3.0",
