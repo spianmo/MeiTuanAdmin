@@ -55,5 +55,7 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: release/${{ github.ref }}/MeiTuanAdmin_${{ github.ref }}.exe
         env:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
