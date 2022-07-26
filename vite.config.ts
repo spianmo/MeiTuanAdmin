@@ -49,4 +49,11 @@ export default defineConfig({
         host: pkg.env.VITE_DEV_SERVER_HOST,
         port: pkg.env.VITE_DEV_SERVER_PORT,
     },
+    build:{
+        terserOptions:{
+            compress:{
+                drop_console:true
+            }
+        },
+    },
 })
