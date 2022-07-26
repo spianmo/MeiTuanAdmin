@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n \"⚡️ Vite\" -c \"yellow.bold\" \"vite\"",
+    "dev": "concurrently -n \"⚡️ Vite\" -c \"yellow.bold\" \"node PreBuild.mjs && vite\"",
     "build": "concurrently -n \"️⚛ Electron-Builder\" -c \"blue.bold\" \"node PreBuild.mjs && vue-tsc --noEmit && vite build && electron-builder\"",
     "devBuild": "concurrently -n \"️⚛ Electron-Builder\" -c \"blue.bold\" \"node PreBuild.mjs && vite build && electron-builder\""
   },
