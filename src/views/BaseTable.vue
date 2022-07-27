@@ -134,9 +134,7 @@ const getData = async () => {
     pageQueryOrders(query).then(async data => {
       tableData.value = data
       await getOrderSumNum()
-      setTimeout(() => {
-        state.loading = false
-      }, 200)
+      state.loading = false
     })
   })
 }
@@ -153,13 +151,25 @@ const dataByGroup = async (workbook) => {
     }
   })
   console.log("group", result)
+  //业绩表行
+  let rowsPerformance = []
   Object.keys(result).forEach(key=>{
     let rows = []
     rows.push({})
+    console.log(result[key])
+    rowsPerformance.push({
+      a: key,
+      b: key,
+      c: result[key]?.filter(item=>item.status !== '未回访')?.length ?? 0,
+      d: result[key]?.filter(item=>item.status === '已回访')?.length ?? 0,
+      e: '',
+      f: localConfig.info.oaInfo.name
+    })
     result[key].forEach((item, index)=>{
+      if (item.status === '未回访') return;
       rows.push({
         id: index + 1,
-        recipient_name: item.info.orderInfo.recipient_name,
+        //recipient_name: item.info.orderInfo.recipient_name,
         orderTime: item.info.orderInfo.order_time_fmt,
         callTime: item.remarkTime,
         privacyPhone: item.info.orderInfo.privacy_phone?.split(',')[1] ?? '',
@@ -170,15 +180,21 @@ const dataByGroup = async (workbook) => {
         staff: localConfig.info.oaInfo.name
       })
     })
+
+    //业绩表生成
+    const worksheetPerformance = XLSX.utils.json_to_sheet(rowsPerformance);
+    XLSX.utils.sheet_add_aoa(worksheetPerformance, [["回访时间", "好评时间", "回访电话数", "电话接通数", "成功好评数", "回访客服"]], {origin: "A1"});
+    XLSX.utils.book_append_sheet(workbook, worksheetPerformance, "业绩表");
+    worksheetPerformance["!cols"] = [{wch: 20},{wch: 20},{wch: 20},{wch: 20},{wch: 20}];
+
+    //每日表生成
     console.log(rows)
     const worksheet = XLSX.utils.json_to_sheet(rows);
-
     worksheet['!merges'] = [
       {s: {r: 0, c: 0}, e: {r: 0, c: 9}}
     ];
-
-    let title = localConfig.mainTitle+ ' ' + key + '成功回访数量: ' + (result[key]?.length ?? 0)
-    XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", "顾客姓名", "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
+    let title = localConfig.mainTitle+ ' ' + key + '成功回访数量: ' + (result[key]?.filter(item=>item.status === '已回访')?.length ?? 0 ?? 0)
+    XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", /**"顾客姓名",**/ "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
         {origin: "A1"});
     XLSX.utils.book_append_sheet(workbook, worksheet, key);
     worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
@@ -192,7 +208,7 @@ const exportData = async () => {
   raw.forEach((item, index)=>{
     rows.push({
       id: index + 1,
-      recipient_name: item.info.orderInfo.recipient_name,
+      //recipient_name: item.info.orderInfo.recipient_name,
       orderTime: item.info.orderInfo.order_time_fmt,
       callTime: item.remarkTime,
       privacyPhone: item.info.orderInfo.privacy_phone?.split(',')[1] ?? '',
@@ -212,7 +228,7 @@ const exportData = async () => {
   ];
 
   let title = localConfig.mainTitle+ '总回访数量:' + state.totalBackOrder + '成功回访数量' + state.successBackOrder
-  XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", "顾客姓名", "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
+  XLSX.utils.sheet_add_aoa(worksheet, [[title], ["序号", /**"顾客姓名",**/ "订单时间", "回访时间", "隐私号码", "备用号码", "手机尾号", "回访状态", "回访备注", "回访客服"]],
       {origin: "A1"});
   XLSX.utils.book_append_sheet(workbook, worksheet, "总表");
   worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
