@@ -4,20 +4,6 @@ on:
   push:
     tags:
       - "v*.*.*"
-  release:
-    branches: [vite]
-    types:
-      - published
-    paths-ignore:
-      - "**.md"
-      - "**.spec.js"
-      - ".idea"
-      - ".vscode"
-      - ".dockerignore"
-      - "Dockerfile"
-      - ".gitignore"
-      - ".github/**"
-      - "!.github/workflows/release.yml"
 
 jobs:
   build:
