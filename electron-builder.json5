@@ -5,7 +5,7 @@
   "appId": "com.meituan.admin",
   "asar": true,
   "directories": {
-    "output": "release/${version}",
+    "output": "release",
     "buildResources": "public"
   },
   "files": [
