@@ -176,16 +176,10 @@ const dataByGroup = async (workbook) => {
         recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
         recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
         status: item.status,
-        remark: item.remark,
+        remark: item.remark ? item.remark : (item.info.orderInfo.is_poi_first_order ? '回头客' : '新客'),
         staff: localConfig.info.oaInfo.name
       })
     })
-
-    //业绩表生成
-    const worksheetPerformance = XLSX.utils.json_to_sheet(rowsPerformance);
-    XLSX.utils.sheet_add_aoa(worksheetPerformance, [["回访时间", "好评时间", "回访电话数", "电话接通数", "成功好评数", "回访客服"]], {origin: "A1"});
-    XLSX.utils.book_append_sheet(workbook, worksheetPerformance, "业绩表");
-    worksheetPerformance["!cols"] = [{wch: 20},{wch: 20},{wch: 20},{wch: 20},{wch: 20}];
 
     //每日表生成
     console.log(rows)
@@ -199,6 +193,11 @@ const dataByGroup = async (workbook) => {
     XLSX.utils.book_append_sheet(workbook, worksheet, key);
     worksheet["!cols"] = [{wch: 10},{wch: 10},{wch: 26},{wch: 26},{wch: 20},{wch: 15},{wch: 10},{wch: 10},{wch: 10},{wch: 10}];
   })
+  //业绩表生成
+  const worksheetPerformance = XLSX.utils.json_to_sheet(rowsPerformance);
+  XLSX.utils.sheet_add_aoa(worksheetPerformance, [["回访时间", "好评时间", "回访电话数", "电话接通数", "成功好评数", "回访客服"]], {origin: "A1"});
+  XLSX.utils.book_append_sheet(workbook, worksheetPerformance, "业绩表");
+  worksheetPerformance["!cols"] = [{wch: 20},{wch: 20},{wch: 20},{wch: 20},{wch: 20}];
 }
 
 const exportData = async () => {
@@ -215,7 +214,7 @@ const exportData = async () => {
       recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
       recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
       status: item.status,
-      remark: item.remark,
+      remark: item.remark ? item.remark : (item.info.orderInfo.is_poi_first_order ? '回头客' : '新客'),
       staff: localConfig.info.oaInfo.name
     })
   })
