@@ -214,7 +214,7 @@ const exportData = async () => {
       recipient_bindedPhone: item.info.orderInfo.recipient_bindedPhone,
       recipient_phone: item.info.orderInfo.recipient_phone.replace('手机尾号', ''),
       status: item.status,
-      remark: item.remark ? item.remark : (item.info.orderInfo.is_poi_first_order ? '回头客' : '新客'),
+      remark: item.remark ? item.remark : (item.info.orderInfo.is_poi_first_order ? '新客' : '回头客'),
       staff: localConfig.info.oaInfo.name
     })
   })
