@@ -1,34 +1,7 @@
-# electron-init
+# 美团商家运营工具
 
-## 简介
+> Electron, Vite, Vue3, ADB
 
-Electron + Vue3 + Vite + Element-Plus + IndexDb快速开发模板
+![de2b500ea3ab3003c64687353ffae9b](https://user-images.githubusercontent.com/18194268/203289721-0d8700e5-9616-45a7-a8da-39a886d9e077.png)
 
-简洁高效, 无需调试, 一键启动, 马上上手开发
-
-- 最新版Electron, 桌面APP利器
-- Vue3 + Vite2开发速度拉满
-- Element-Plus优雅秀气
-- IndexDb本地数据库, 封装API, 即刻上手
-- 封装常用组件等
-
-## 1. 安装
-
-```shell
-npm install
-或
-yarn
-```
-
-## 2. 开发
-
-```shell
-npm run dev
-```
-
-## 3. 打包
-
-```shell
-npm run build
-```
-
+![de2b500ea3ab3003c64687353ffae9b](https://user-images.githubusercontent.com/18194268/203290002-8b86d8d7-232c-4f5e-99c6-57e2109dfb74.jpg)
